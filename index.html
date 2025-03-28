@@ -88,6 +88,7 @@
             }
         }
     
+        // Countdown Timer Function
         function startCountdown() {
             let countdown = 5;
             document.getElementById('countdown').style.display = 'block';
@@ -100,7 +101,7 @@
                 if (countdown <= 0) {
                     clearInterval(interval);
                     document.getElementById('countdown').style.display = 'none';
-                    startRecording();
+                    startRecording();  // Recording starts after countdown
                 }
             }, 1000);
         }

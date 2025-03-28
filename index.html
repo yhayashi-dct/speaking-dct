@@ -94,27 +94,24 @@
             }
         }
 
-        // 🟢 Countdown Timer Function Added
+      // 🟢 Countdown Timer Function with Icon
         function startCountdown() {
-    console.log("Countdown started!"); // Debugging
-    let countdown = 5;
-    document.getElementById('countdown').style.display = 'block';
-    document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
+            let countdown = 5;
+            document.getElementById('countdown').style.display = 'block';
+            document.getElementById('countdown-text').innerText = `Recording starts in ${countdown} seconds...`;
 
-    let interval = setInterval(() => {
-        countdown--;
-        console.log(`Countdown: ${countdown}`); // Debugging
-        document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
+            let interval = setInterval(() => {
+                countdown--;
+                document.getElementById('countdown-text').innerText = `Recording starts in ${countdown} seconds...`;
 
-        if (countdown <= 0) {
-            clearInterval(interval);
-            document.getElementById('countdown').style.display = 'none';
-            console.log("Starting recording..."); // Debugging
-            startRecording();  // Recording starts after countdown
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown').style.display = 'none';
+                    startRecording();
+                }
+            }, 1000);
         }
-    }, 1000);
-}
-        // 🔴 Countdown Timer Function Ends
+        // 🔴 Countdown Timer with Icon Ends
 
         function startRecording() {
             if (!('webkitSpeechRecognition' in window)) {

@@ -217,13 +217,17 @@
                     
                     volumeBlocks.forEach((block, index) => {
                         if (index < volumeLevel) {
-                    } else if (volumePercent >= 33 && volumePercent < 66) {
-                        volumeBar.style.backgroundColor = 'yellow';
-                    } else {
-                        volumeBar.style.backgroundColor = 'green';
-                    }
-
-                    volumeBar.style.width = volumePercent + '%';
+                            if (volumeLevel <= 3) {
+                                block.style.backgroundColor = 'red';
+                            } else if (volumeLevel <= 6) {
+                                block.style.backgroundColor = 'yellow';
+                            } else {
+                                block.style.backgroundColor = 'green';
+                            }
+                        } else {
+                            block.style.backgroundColor = '#ddd';
+                        }
+                    });
                     requestAnimationFrame(updateVolume);
                 }
 

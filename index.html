@@ -110,15 +110,16 @@
         <div id="progress" style="display:none;">
             <h2>Your Progress</h2>
             <p id="progressData">No attempts yet.</p>
+            <button onclick="downloadProgress()">Download Progress</button>
         </div>
     </div>
 
     <script>
         let questionIndex = 0;
         const questions = [
-            "Describe your favorite hobby.",
-            "What did you do last weekend?",
-            "Talk about a place you'd like to visit.",
+            "We should go somewhere to make memories. Do you have any suggestions for where to go?",
+            "Do you know how to get there?",
+            "When and how long is this holiday going to be?",
             "Describe a memorable event in your life.",
             "What is your favorite food and why do you like it?",
             "Tell me about a friend who inspires you."
@@ -259,7 +260,25 @@
         function showProgress() {
             document.getElementById('test').style.display = 'none';
             document.getElementById('progress').style.display = 'block';
-            document.getElementById('progressData').innerText = "You answered " + answers.length + " questions. Keep practicing!";
+            document.getElementById('progressData').innerText = `You answered ${answers.length} questions. Keep practicing!`;
+        }
+
+        // Download progress as text file
+        function downloadProgress() {
+            let progressData = "Your Speaking Test Progress:\n\n";
+            answers.forEach((answer, index) => {
+                progressData += `Q${index + 1}: ${questions[index]}\nAnswer: ${answer}\n\n`;
+            });
+
+            const blob = new Blob([progressData], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'progress_report.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     </script>
 </body>

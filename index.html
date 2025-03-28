@@ -55,17 +55,16 @@
             display: none;
         }
         #volume-container {
-            width: 100%;
-            height: 20px;
-            background-color: #ddd;
+            display: flex;
+            justify-content: center;
             margin-top: 10px;
-            border-radius: 10px;
-            overflow: hidden;
         }
-        #volume-bar {
-            height: 100%;
-            width: 0%;
-            transition: width 0.1s;
+        .volume-block {
+            width: 10px;
+            height: 20px;
+            margin: 0 2px;
+            background-color: #ddd;
+            transition: background-color 0.1s;
         }
     </style>
 </head>
@@ -86,12 +85,21 @@
                 <span id="countdown-text">Recording starts in 5 seconds...</span>
             </p>
 
-            <!-- Microphone and volume bar during recording -->
+            <!-- Microphone and volume block bar during recording -->
             <div id="recording-icons">
                 <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
                 <p>Recording... Speak now!</p>
                 <div id="volume-container">
-                    <div id="volume-bar"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
+                    <div class="volume-block"></div>
                 </div>
             </div>
 
@@ -120,7 +128,7 @@
         let audioContext;
         let analyser;
         let microphone;
-        let volumeBar;
+        let volumeBlocks;
 
         function startTest() {
             document.querySelector('button').style.display = 'none';
@@ -164,9 +172,9 @@
             recognition.interimResults = false;
             recognition.lang = 'en-US';
 
-            // Show microphone and volume bar
+            // Show microphone and volume blocks
             document.getElementById('recording-icons').style.display = 'block';
-            volumeBar = document.getElementById('volume-bar');
+            volumeBlocks = document.querySelectorAll('.volume-block');
 
             startVolumeMeter();
 
@@ -191,7 +199,7 @@
             };
         }
 
-        // Volume meter functionality
+        // Volume meter functionality with blocks
         function startVolumeMeter() {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
@@ -205,10 +213,10 @@
                 function updateVolume() {
                     analyser.getByteFrequencyData(dataArray);
                     let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                    let volumePercent = Math.min(100, (volume / 255) * 100);
+                    let volumeLevel = Math.min(10, Math.floor((volume / 255) * 10));
                     
-                    if (volumePercent < 33) {
-                        volumeBar.style.backgroundColor = 'red';
+                    volumeBlocks.forEach((block, index) => {
+                        if (index < volumeLevel) {
                     } else if (volumePercent >= 33 && volumePercent < 66) {
                         volumeBar.style.backgroundColor = 'yellow';
                     } else {

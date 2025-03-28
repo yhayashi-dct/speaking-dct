@@ -93,21 +93,24 @@
 
         // 🟢 Countdown Timer Function Added
         function startCountdown() {
-            let countdown = 5;
-            document.getElementById('countdown').style.display = 'block';
-            document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
-            
-            let interval = setInterval(() => {
-                countdown--;
-                document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
+    console.log("Countdown started!"); // Debugging
+    let countdown = 5;
+    document.getElementById('countdown').style.display = 'block';
+    document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
 
-                if (countdown <= 0) {
-                    clearInterval(interval);
-                    document.getElementById('countdown').style.display = 'none';
-                    startRecording();  // Recording starts after countdown
-                }
-            }, 1000);
+    let interval = setInterval(() => {
+        countdown--;
+        console.log(`Countdown: ${countdown}`); // Debugging
+        document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
+
+        if (countdown <= 0) {
+            clearInterval(interval);
+            document.getElementById('countdown').style.display = 'none';
+            console.log("Starting recording..."); // Debugging
+            startRecording();  // Recording starts after countdown
         }
+    }, 1000);
+}
         // 🔴 Countdown Timer Function Ends
 
         function startRecording() {

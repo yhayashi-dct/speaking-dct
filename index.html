@@ -87,6 +87,23 @@
                 showProgress();
             }
         }
+    
+        function startCountdown() {
+            let countdown = 5;
+            document.getElementById('countdown').style.display = 'block';
+            document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
+            
+            let interval = setInterval(() => {
+                countdown--;
+                document.getElementById('countdown').innerText = `Recording starts in ${countdown} seconds...`;
+
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown').style.display = 'none';
+                    startRecording();
+                }
+            }, 1000);
+        }
 
         function startRecording() {
             if (!('webkitSpeechRecognition' in window)) {

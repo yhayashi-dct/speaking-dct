@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,7 +48,12 @@
         <div id="test" style="display:none;">
             <h2>Question:</h2>
             <p id="question">Say something about your favorite hobby.</p>
-            <button onclick="startRecording()">Record Answer</button>
+
+            <!-- 🟢 Countdown Timer Section Added Here -->
+            <button onclick="startCountdown()">Record Answer</button>
+            <p id="countdown" style="text-align:center; font-size:18px; color:red; display:none;"></p>
+            <!-- 🔴 Countdown Timer Ends Here -->
+
             <button onclick="submitAnswer()">Submit</button>
             <p id="feedback"></p>
         </div>
@@ -57,7 +61,6 @@
         <div id="progress" style="display:none;">
             <h2>Your Progress</h2>
             <p id="progressData">No attempts yet.</p>
-            <button onclick="downloadProgress()">Download Progress</button>
         </div>
     </div>
 
@@ -87,8 +90,8 @@
                 showProgress();
             }
         }
-    
-        // Countdown Timer Function
+
+        // 🟢 Countdown Timer Function Added
         function startCountdown() {
             let countdown = 5;
             document.getElementById('countdown').style.display = 'block';
@@ -105,6 +108,7 @@
                 }
             }, 1000);
         }
+        // 🔴 Countdown Timer Function Ends
 
         function startRecording() {
             if (!('webkitSpeechRecognition' in window)) {
@@ -148,21 +152,6 @@
             document.getElementById('test').style.display = 'none';
             document.getElementById('progress').style.display = 'block';
             document.getElementById('progressData').innerText = "You answered " + answers.length + " questions. Keep practicing!";
-        }
-
-        function downloadProgress() {
-            let data = "Questions and Answers:\n\n";
-            for (let i = 0; i < answers.length; i++) {
-                data += (i + 1) + ". " + questions[i] + "\nAnswer: " + answers[i] + "\n\n";
-            }
-            const blob = new Blob([data], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'progress_report.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
         }
     </script>
 </body>

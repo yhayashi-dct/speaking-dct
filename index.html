@@ -43,7 +43,7 @@
             color: red;
             display: none;
         }
-        #timer-icon, #mic-icon, #volume-icon {
+        #timer-icon, #mic-icon {
             width: 30px;
             height: 30px;
             vertical-align: middle;
@@ -53,6 +53,18 @@
             text-align: center;
             margin-top: 20px;
             display: none;
+        }
+        #volume-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin-top: 10px;
+        }
+        #volume-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #4CAF50;
+            transition: width 0.1s;
         }
     </style>
 </head>
@@ -73,11 +85,13 @@
                 <span id="countdown-text">Recording starts in 5 seconds...</span>
             </p>
 
-            <!-- Microphone and volume icons to display during recording -->
+            <!-- Microphone and volume bar during recording -->
             <div id="recording-icons">
                 <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
-                <img id="volume-icon" src="https://img.icons8.com/ios-filled/50/000000/speaker.png" alt="volume icon" />
                 <p>Recording... Speak now!</p>
+                <div id="volume-bar">
+                    <div id="volume-fill"></div>
+                </div>
             </div>
 
             <button onclick="submitAnswer()">Submit</button>
@@ -102,6 +116,10 @@
         ];
         let answers = [];
         let recognition;
+        let audioContext;
+        let analyser;
+        let microphone;
+        let volumeFill;
 
         function startTest() {
             document.querySelector('button').style.display = 'none';
@@ -145,8 +163,11 @@
             recognition.interimResults = false;
             recognition.lang = 'en-US';
 
-            // Show microphone and volume icons when recording starts
+            // Show microphone and volume bar
             document.getElementById('recording-icons').style.display = 'block';
+            volumeFill = document.getElementById('volume-fill');
+
+            startVolumeMeter();
 
             recognition.start();
 
@@ -157,14 +178,48 @@
                 
                 // Hide icons after recording is complete
                 document.getElementById('recording-icons').style.display = 'none';
+                stopVolumeMeter();
                 questionIndex++;
                 setTimeout(loadQuestion, 2000);
             };
 
             recognition.onerror = function(event) {
                 alert('Error occurred while recording. Please try again.');
-                document.getElementById('recording-icons').style.display = 'none'; // Hide icons on error
+                document.getElementById('recording-icons').style.display = 'none';
+                stopVolumeMeter();
             };
+        }
+
+        // Volume meter functionality
+        function startVolumeMeter() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+                microphone = audioContext.createMediaStreamSource(stream);
+                analyser = audioContext.createAnalyser();
+                microphone.connect(analyser);
+                analyser.fftSize = 256;
+
+                let dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                function updateVolume() {
+                    analyser.getByteFrequencyData(dataArray);
+                    let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+                    let volumePercent = Math.min(100, (volume / 255) * 100);
+                    volumeFill.style.width = volumePercent + '%';
+                    requestAnimationFrame(updateVolume);
+                }
+
+                updateVolume();
+            });
+        }
+
+        function stopVolumeMeter() {
+            if (microphone) {
+                microphone.disconnect();
+            }
+            if (audioContext) {
+                audioContext.close();
+            }
         }
 
         function getFeedback(transcript) {

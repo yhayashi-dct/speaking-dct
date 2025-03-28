@@ -37,6 +37,23 @@
         #feedback, #progress {
             margin-top: 20px;
         }
+        #countdown {
+            text-align: center;
+            font-size: 18px;
+            color: red;
+            display: none;
+        }
+        #timer-icon, #mic-icon, #volume-icon {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        #recording-icons {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -49,13 +66,19 @@
             <h2>Question:</h2>
             <p id="question">Say something about your favorite hobby.</p>
 
-            <!-- 🟢 Timer Icon with Countdown Added Here -->
+            <!-- Countdown timer before recording -->
             <button onclick="startCountdown()">Record Answer</button>
             <p id="countdown">
                 <img id="timer-icon" src="https://img.icons8.com/ios-filled/50/000000/timer.png" alt="timer icon" />
                 <span id="countdown-text">Recording starts in 5 seconds...</span>
             </p>
-            <!-- 🔴 Timer Icon with Countdown Ends Here -->
+
+            <!-- Microphone and volume icons to display during recording -->
+            <div id="recording-icons">
+                <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
+                <img id="volume-icon" src="https://img.icons8.com/ios-filled/50/000000/speaker.png" alt="volume icon" />
+                <p>Recording... Speak now!</p>
+            </div>
 
             <button onclick="submitAnswer()">Submit</button>
             <p id="feedback"></p>
@@ -94,7 +117,7 @@
             }
         }
 
-      // 🟢 Countdown Timer Function with Icon
+        // Countdown timer before recording
         function startCountdown() {
             let countdown = 5;
             document.getElementById('countdown').style.display = 'block';
@@ -111,7 +134,6 @@
                 }
             }, 1000);
         }
-        // 🔴 Countdown Timer with Icon Ends
 
         function startRecording() {
             if (!('webkitSpeechRecognition' in window)) {
@@ -123,19 +145,25 @@
             recognition.interimResults = false;
             recognition.lang = 'en-US';
 
+            // Show microphone and volume icons when recording starts
+            document.getElementById('recording-icons').style.display = 'block';
+
             recognition.start();
-            alert("Recording started... Speak now!");
 
             recognition.onresult = function(event) {
                 let transcript = event.results[0][0].transcript;
                 answers.push(transcript);
                 document.getElementById('feedback').innerText = getFeedback(transcript);
+                
+                // Hide icons after recording is complete
+                document.getElementById('recording-icons').style.display = 'none';
                 questionIndex++;
                 setTimeout(loadQuestion, 2000);
             };
 
             recognition.onerror = function(event) {
                 alert('Error occurred while recording. Please try again.');
+                document.getElementById('recording-icons').style.display = 'none'; // Hide icons on error
             };
         }
 

@@ -155,10 +155,11 @@
         
         const questions = [...task1Questions, ...task2Questions];
         
+        // Updated video paths to ensure correct videos load
         const videos = [
-            "videos/task1_DCT 1 Q1.mp4",
-            "videos/task1_DCT 1 Q2.mp4",
-            "videos/task1_DCT 1 Q3.mp4",
+            "videos/DCT 1 Q1.mp4",
+            "videos/DCT 1 Q2.mp4",
+            "videos/DCT 1 Q3.mp4",
             "videos/task2_question1.mp4",
             "videos/task2_question2.mp4",
             "videos/task2_question3.mp4"
@@ -183,7 +184,7 @@
                     document.getElementById('task-title').innerText = taskTitles[1];
                 }
                 document.getElementById('question').innerText = questions[questionIndex];
-                loadVideo(questionIndex);
+                loadVideo(questionIndex); // Load the correct video
             } else {
                 showProgress();
             }
@@ -193,7 +194,7 @@
         function loadVideo(index) {
             const videoElement = document.getElementById('question-video');
             const videoSource = document.getElementById('video-source');
-            videoSource.src = videos[index];
+            videoSource.src = videos[index]; // Load the corresponding video
             videoElement.load();
             videoElement.play();
         }

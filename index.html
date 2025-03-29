@@ -77,50 +77,36 @@
     </style>
 </head>
 <body>
-    <div class="container">
+ <div class="container">
         <h1>Welcome!</h1>
         <p>Press "Start" to begin.</p>
-        <button onclick="startTest()">Start Test</button>
-        
+        <button onclick="showInstruction(0)">Start Test</button>
+
+        <!-- Instruction Page for Task 1 and Task 2 -->
+        <div id="instruction" style="display:none;">
+            <h2 id="instruction-title">Task Instructions</h2>
+            <div id="video-container">
+                <video id="instruction-video" controls autoplay>
+                    <source id="instruction-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <p id="instruction-text">Watch the video for task instructions.</p>
+            <button onclick="startTask()">Next</button>
+        </div>
+
+        <!-- Main Test Section -->
         <div id="test" style="display:none;">
             <h3 id="task-title">DCT 1</h3>
-
-            <!-- Video player for questions -->
             <div id="video-container">
                 <video id="question-video" controls autoplay muted>
                     <source id="video-source" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
-
             <h2>Question:</h2>
             <p id="question">Say something about your favorite hobby.</p>
-
-            <!-- Countdown timer before recording -->
             <button onclick="startCountdown()">Record Answer</button>
-            <p id="countdown">
-                <img id="timer-icon" src="https://img.icons8.com/ios-filled/50/000000/timer.png" alt="timer icon" />
-                <span id="countdown-text">Recording starts in 5 seconds...</span>
-            </p>
-
-            <!-- Microphone and volume block bar during recording -->
-            <div id="recording-icons">
-                <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
-                <p>Recording... Speak now!</p>
-                <div id="volume-container">
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                    <div class="volume-block"></div>
-                </div>
-            </div>
-
             <button onclick="submitAnswer()">Submit</button>
             <p id="feedback"></p>
         </div>
@@ -165,56 +151,53 @@
             "videos/DCT2 Q2.mp4"
         ];
         
-        let answers = [];
-        let recognition;
-        let audioContext;
-        let analyser;
-        let microphone;
-        let volumeBlocks;
+       let answers = [];
 
-        function startTest() {
+        // Show task instruction video
+        function showInstruction(task) {
+            taskIndex = task;
             document.querySelector('button').style.display = 'none';
+            document.getElementById('instruction').style.display = 'block';
+            document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+            document.getElementById('instruction-source').src = instructionVideos[task];
+            document.getElementById('instruction-video').load();
+        }
+
+        // Start Task after watching instructions
+        function startTask() {
+            document.getElementById('instruction').style.display = 'none';
             document.getElementById('test').style.display = 'block';
             loadQuestion();
         }
 
+        // Load questions and videos
         function loadQuestion() {
             if (questionIndex < questions.length) {
                 if (questionIndex === task1Questions.length) {
-                    document.getElementById('task-title').innerText = taskTitles[1];
+                    taskIndex = 1;
+                    showInstruction(1); // Show Task 2 instructions
+                    return;
                 }
+                document.getElementById('task-title').innerText = taskTitles[taskIndex];
                 document.getElementById('question').innerText = questions[questionIndex];
-                loadVideo(questionIndex); // Load the correct video
+                loadVideo(questionIndex);
             } else {
                 showProgress();
             }
         }
 
-        // Load the correct video for the current question
+        // Load the correct video for each question
         function loadVideo(index) {
             const videoElement = document.getElementById('question-video');
             const videoSource = document.getElementById('video-source');
-            videoSource.src = videos[index]; // Load the corresponding video
+            videoSource.src = videos[index];
             videoElement.load();
             videoElement.play();
         }
 
-        // Countdown timer before recording
         function startCountdown() {
-            let countdown = 5;
-            document.getElementById('countdown').style.display = 'block';
-            document.getElementById('countdown-text').innerText = `Recording starts in ${countdown} seconds...`;
-
-            let interval = setInterval(() => {
-                countdown--;
-                document.getElementById('countdown-text').innerText = `Recording starts in ${countdown} seconds...`;
-
-                if (countdown <= 0) {
-                    clearInterval(interval);
-                    document.getElementById('countdown').style.display = 'none';
-                    startRecording();
-                }
-            }, 1000);
+            alert("Recording starts in 5 seconds...");
+            setTimeout(startRecording, 5000);
         }
 
         function startRecording() {

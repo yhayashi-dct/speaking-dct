@@ -26,13 +26,13 @@
             width: 100%;
             padding: 10px;
             margin-top: 20px;
-            background-color: #FFA500; /* Orange */
+            background-color: #FFA500;
             color: white;
             border: none;
             cursor: pointer;
         }
         button:hover {
-            background-color: #FF8C00; /* Darker Orange */
+            background-color: #FF8C00;
         }
         #instruction, #test, #progress {
             margin-top: 20px;
@@ -46,6 +46,12 @@
             width: 80%;
             height: auto;
         }
+        #timer {
+            text-align: center;
+            font-size: 18px;
+            color: red;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -54,7 +60,6 @@
         <p>Press "Start" to begin.</p>
         <button onclick="showInstruction(0)">Start Test</button>
 
-        <!-- Instruction Page for Task 1 and Task 2 -->
         <div id="instruction" style="display:none;">
             <h2 id="instruction-title">Task Instructions</h2>
             <div id="video-container">
@@ -67,7 +72,6 @@
             <button onclick="startTask()">Next</button>
         </div>
 
-        <!-- Main Test Section -->
         <div id="test" style="display:none;">
             <h3 id="task-title">DCT 1</h3>
             <div id="video-container">
@@ -76,8 +80,7 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <h2>Question:</h2>
-            <p id="question">Say something about your favorite hobby.</p>
+            <div id="timer">Time remaining: 30 seconds</div>
             <button onclick="startCountdown()">Record Answer</button>
             <button onclick="submitAnswer()">Submit</button>
             <p id="feedback"></p>
@@ -91,31 +94,17 @@
     </div>
 
     <script>
-        let questionIndex = 0;
+        let videoIndex = 0;
         let taskIndex = 0;
-        let showingInstruction = true;
+        let countdownInterval;
+        let timeLeft = 30;
 
         const taskTitles = ["DCT 1", "DCT 2"];
-        
-        // Updated videos for questions and instructions
+
         const instructionVideos = [
             "videos/DCT1 instructions.mp4",
             "videos/DCT2 instructions.mp4"
         ];
-
-        const task1Questions = [
-            "We should go somewhere to make memories. Do you have any suggestions for where to go?",
-            "Do you know how to get there?",
-            "When and how long is this holiday going to be?"
-        ];
-
-        const task2Questions = [
-            "Describe a memorable event in your life.",
-            "What is your favorite food and why do you like it?",
-            "Tell me about a friend who inspires you."
-        ];
-
-        const questions = [...task1Questions, ...task2Questions];
 
         const videos = [
             "videos/DCT1 Q1.mp4",
@@ -127,7 +116,6 @@
 
         let answers = [];
 
-        // Show task instruction video
         function showInstruction(task) {
             taskIndex = task;
             document.querySelector('button').style.display = 'none';
@@ -137,36 +125,19 @@
             document.getElementById('instruction-video').load();
         }
 
-        // Start Task after watching instructions
         function startTask() {
             document.getElementById('instruction').style.display = 'none';
             document.getElementById('test').style.display = 'block';
-            loadQuestion();
+            loadVideo(videoIndex);
         }
 
-        // Load questions and videos
-        function loadQuestion() {
-            if (questionIndex < questions.length) {
-                if (questionIndex === task1Questions.length) {
-                    taskIndex = 1;
-                    showInstruction(1); // Show Task 2 instructions
-                    return;
-                }
-                document.getElementById('task-title').innerText = taskTitles[taskIndex];
-                document.getElementById('question').innerText = questions[questionIndex];
-                loadVideo(questionIndex);
-            } else {
-                showProgress();
-            }
-        }
-
-        // Load the correct video for each question
         function loadVideo(index) {
             const videoElement = document.getElementById('question-video');
             const videoSource = document.getElementById('video-source');
             videoSource.src = videos[index];
             videoElement.load();
             videoElement.play();
+            resetTimer();
         }
 
         function startCountdown() {
@@ -176,13 +147,42 @@
 
         function startRecording() {
             alert("Recording started! Speak now.");
+            startTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 30;
+            document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    alert("Time is up!");
+                    submitAnswer();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(countdownInterval);
+            document.getElementById("timer").innerText = "Time remaining: 30 seconds";
         }
 
         function submitAnswer() {
+            clearInterval(countdownInterval);
             alert("Answer submitted.");
-            answers.push("Sample answer " + (questionIndex + 1));
-            questionIndex++;
-            loadQuestion();
+            answers.push("Sample answer " + (videoIndex + 1));
+            videoIndex++;
+
+            if (videoIndex === 3) {
+                showInstruction(1);
+                return;
+            } else if (videoIndex >= videos.length) {
+                showProgress();
+            } else {
+                loadVideo(videoIndex);
+            }
         }
 
         function showProgress() {
@@ -194,8 +194,8 @@
         function downloadProgress() {
             let progressData = "Your Speaking Test Progress:\n\n";
             answers.forEach((answer, index) => {
-                let taskName = index < task1Questions.length ? taskTitles[0] : taskTitles[1];
-                progressData += `${taskName}\nQ${index + 1}: ${questions[index]}\nAnswer: ${answer}\n\n`;
+                let taskName = index < 3 ? taskTitles[0] : taskTitles[1];
+                progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
             });
 
             const blob = new Blob([progressData], { type: 'text/plain' });

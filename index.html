@@ -1,113 +1,324 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Speaking Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2, h3 {
-            text-align: center;
-        }
-        button {
-            display: block;
-            width: 50%;
-            padding: 10px;
-            margin-top: 20px;
-            background-color: #FFA500;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #FF8C00;
-        }
-        input[type="text"], select {
-            width: 40%;
-            padding: 8px;
-            margin-top: 10px;
-        }
-        #instruction, #test, #followup, #progress {
-            margin-top: 20px;
-            display: none;
-        }
-        #video-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        video {
-            width: 80%;
-            height: auto;
-        }
-        #timer {
-            text-align: center;
-            font-size: 18px;
-            color: red;
-            margin-top: 10px;
-        }
-        #option-buttons {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .option-btn {
-            display: inline-block;
-            margin: 0 10px;
-            padding: 10px 20px;
-            background-color: #FFA500;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .option-btn:hover {
-            background-color: #FF8C00;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Language Speaking Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #FFA500;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #FF8C00;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+    }
+    #instruction, #test, #followup, #progress {
+      margin-top: 20px;
+      display: none;
+    }
+    #video-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    video {
+      width: 80%;
+      height: auto;
+    }
+    #timer {
+      text-align: center;
+      font-size: 18px;
+      color: red;
+      margin-top: 10px;
+    }
+    #option-buttons {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .option-btn {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 10px 20px;
+      background-color: #FFA500;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .option-btn:hover {
+      background-color: #FF8C00;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome!</h1>
+  <div class="container">
+    <h1>Welcome!</h1>
 
-        <div id="consent-form">
-            <h2>Participant Information</h2>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="age">Age:</label>
-            <input type="text" id="age" name="age" required>
-            <label for="language">First Language:</label>
-            <input type="text" id="language" name="language" required>
-            <label for="level">English Proficiency Level:</label>
-            <select id="level" name="level">
-               <option value="TOEIC">Beginner</option>
-                <option value="英検">Intermediate</option>
-                <option value="TOEFL iBT">Advanced</option>
-                <option value="IELTS">Advanced</option>
-            </select>
+    <!-- Consent + Personal Info Section -->
+    <div id="consent-form">
+      <h2>Participant Information</h2>
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+      <label for="age">Age:</label>
+      <input type="text" id="age" required />
+      <label for="language">First Language:</label>
+      <input type="text" id="language" required />
+      <label for="level">English Proficiency Level:</label>
+      <select id="level">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
 
-            <h2>Informed Consent</h2>
-            <ul>
-                <li>本研究は、佐賀大学教育学部准教授の林裕子が研究代表者として実施する研究である（科研費課題基盤研究(C)No. 22K00790）。</li>
-                <li>本研究への参加は義務化されておらず、参加者は説明責任を負うことなく途中で辞退することも可能である。</li>
-                <li>本研究の一環で受けるスピーキングテストでの成績は正課カリキュラムには影響しない。</li>
-                <li>収集されたデータは匿名で保管され、個人情報として適切に管理される。</li>
-                <li>収集されたデータは研究代表者と分担者、及び研究協力者のみアクセス可能である。</li>
-                <li>本研究は佐賀大学倫理委員会より実施許可を得ている。</li>
-                <li>質問・問い合わせがある場合は研究代表者（林裕子）に連絡を取る。 (Email: yhayashi@cc.saga-u.ac.jp)</li>
-            </ul>
-            <label><input type="checkbox" id="consent-checkbox"> I agree.（同意する）</label>
-            <button onclick="startTest()">Start Test</button>
-        </div>
+      <h2>Informed Consent</h2>
+      <ul>
+        <li>本研究は、佐賀大学教育学部准教授の林裕子が研究代表者として実施する研究である（科研費課題基盤研究(C)No. 22K00790）。</li>
+        <li>本研究への参加は義務化されておらず、参加者は説明責任を負うことなく途中で辞退することも可能である。</li>
+        <li>本研究の一環で受けるスピーキングテストでの成績は正課カリキュラムには影響しない。</li>
+        <li>収集されたデータは匿名で保管され、個人情報として適切に管理される。</li>
+        <li>収集されたデータは研究代表者と分担者、及び研究協力者のみアクセス可能である。</li>
+        <li>本研究は佐賀大学倫理委員会より実施許可を得ている。</li>
+        <li>質問・問い合わせがある場合は研究代表者（林裕子）に連絡を取る。 (Email: yhayashi@cc.saga-u.ac.jp)</li>
+      </ul>
+      <label><input type="checkbox" id="consent-checkbox" /> I agree.（同意する）</label>
+      <button onclick="validateConsent()">Start Test</button>
+    </div>
 
-        <!-- Existing instruction, test, followup, progress sections follow... -->
+    <!-- Instruction Section -->
+    <div id="instruction">
+      <h2 id="instruction-title">Task Instructions</h2>
+      <div id="video-container">
+        <video id="instruction-video" controls autoplay>
+          <source id="instruction-source" src="" type="video/mp4" />
+        </video>
+      </div>
+      <p id="instruction-text">Watch the video for task instructions.</p>
+      <button onclick="startTask()">Next</button>
+    </div>
+
+    <!-- Test Section -->
+    <div id="test">
+      <h3 id="task-title">DCT 1</h3>
+      <div id="video-container">
+        <video id="question-video" controls autoplay onended="checkForOptions()">
+          <source id="video-source" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+      <p id="feedback"></p>
+      <div id="option-buttons">
+        <button class="option-btn" onclick="handleOption('Yes')">Yes</button>
+        <button class="option-btn" onclick="handleOption('No')">No</button>
+        <button class="option-btn" onclick="handleOption('Others')">Others</button>
+      </div>
+    </div>
+
+    <!-- Follow-up Section -->
+    <div id="followup">
+      <h3>Follow-up Question</h3>
+      <div id="video-container">
+        <video id="followup-video" controls autoplay>
+          <source id="followup-source" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <!-- Progress Section -->
+    <div id="progress">
+      <h2>Your Progress</h2>
+      <p id="progressData">No attempts yet.</p>
+      <button onclick="downloadProgress()">Download Progress</button>
+    </div>
+  </div>
+
+  <script>
+    let videoIndex = 0;
+    let taskIndex = 0;
+    let countdownInterval;
+    let timeLeft = 30;
+    let isFollowup = false;
+
+    const taskTitles = ["DCT 1", "DCT 2", "DCT 3"];
+    const instructionVideos = [
+      "videos/DCT1 instructions.mp4",
+      "videos/DCT2 instructions.mp4",
+      "videos/DCT_split questions_instructions.mp4"
+    ];
+    const videos = [
+      "videos/DCT 1 Q1.mp4",
+      "videos/DCT 1 Q2.mp4",
+      "videos/DCT 1 Q3.mp4",
+      "videos/DCT 1 Q1.mp4",
+      "videos/DCT2 Q2.mp4",
+      "videos/DCT_split questions_Q1.mp4"
+    ];
+    const followupVideos = {
+      Yes: "videos/DCT_split questions Q1_yes.mp4",
+      No: "videos/DCT_split questions Q1_no.mp4",
+      Others: "videos/DCT_split questions Q1_others.mp4"
+    };
+    let answers = [];
+
+    function validateConsent() {
+      const checkbox = document.getElementById('consent-checkbox');
+      if (!checkbox.checked) {
+        alert('You must agree to the informed consent to proceed.');
+        return;
+      }
+      document.getElementById('consent-form').style.display = 'none';
+      showInstruction(0);
+    }
+
+    function showInstruction(task) {
+      taskIndex = task;
+      document.getElementById('instruction').style.display = 'block';
+      document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+      document.getElementById('instruction-source').src = instructionVideos[task];
+      document.getElementById('instruction-video').load();
+    }
+
+    function startTask() {
+      document.getElementById('instruction').style.display = 'none';
+      document.getElementById('test').style.display = 'block';
+      loadVideo(videoIndex);
+    }
+
+    function loadVideo(index) {
+      const videoElement = document.getElementById('question-video');
+      const videoSource = document.getElementById('video-source');
+      videoSource.src = videos[index];
+      videoElement.load();
+      videoElement.play();
+      resetTimer();
+      document.getElementById('option-buttons').style.display = 'none';
+    }
+
+    function startCountdown() {
+      alert("Recording starts in 5 seconds...");
+      setTimeout(startRecording, 5000);
+    }
+
+    function startRecording() {
+      alert("Recording started! Speak now.");
+      startTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 30;
+      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          alert("Time is up!");
+          submitAnswer();
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(countdownInterval);
+      document.getElementById("timer").innerText = "Time remaining: 30 seconds";
+    }
+
+    function submitAnswer() {
+      clearInterval(countdownInterval);
+      alert("Answer submitted.");
+      answers.push("Sample answer " + (videoIndex + 1));
+      if (isFollowup) {
+        document.getElementById('followup').style.display = 'none';
+        isFollowup = false;
+        videoIndex++;
+      } else {
+        videoIndex++;
+      }
+
+      if (videoIndex === 3) {
+        showInstruction(1);
+      } else if (videoIndex === 5) {
+        showInstruction(2);
+      } else if (videoIndex >= videos.length) {
+        showProgress();
+      } else {
+        loadVideo(videoIndex);
+      }
+    }
+
+    function checkForOptions() {
+      const currentVideo = videos[videoIndex];
+      if (currentVideo.includes("DCT_split questions_Q1")) {
+        document.getElementById('option-buttons').style.display = 'block';
+      }
+    }
+
+    function handleOption(option) {
+      alert("You selected: " + option);
+      document.getElementById('option-buttons').style.display = 'none';
+      isFollowup = true;
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('followup').style.display = 'block';
+      const followupVideo = document.getElementById('followup-video');
+      const followupSource = document.getElementById('followup-source');
+      followupSource.src = followupVideos[option];
+      followupVideo.load();
+      followupVideo.play();
+      resetTimer();
+    }
+
+    function showProgress() {
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('progress').style.display = 'block';
+      document.getElementById('progressData').innerText = `You answered ${answers.length} questions. Keep practicing!`;
+    }
+
+    function downloadProgress() {
+      let progressData = "Your Speaking Test Progress:\n\n";
+      answers.forEach((answer, index) => {
+        let taskName = index < 3 ? taskTitles[0] : index < 5 ? taskTitles[1] : taskTitles[2];
+        progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
+      });
+
+      const blob = new Blob([progressData], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'progress_report.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>

@@ -214,87 +214,27 @@
   <div class="container">
     <h1>Welcome!</h1>
     <div id="status-message"></div>
-
-    <!-- ✅ Instruction Section -->
-    <div id="instruction">
-      <h2 id="instruction-title">Task Instructions</h2>
-      <div id="video-container">
-        <video id="instruction-video" controls muted autoplay playsinline onended="startTask()">
-          <source id="instruction-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <button onclick="startTask()">Next</button>
-    </div>
-
-    <!-- ✅ DCT 1 Test Section -->
+   
+    <!-- DCT 1 Test Section -->
     <div id="test">
-      <h3>DCT 1</h3>
-      <div id="video-container">
-        <video id="question-video" controls autoplay onended="checkForOptions()">
-          <source id="video-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
-      <div id="option-buttons">
-        <button onclick="handleOption('Yes')">Yes</button>
-        <button onclick="handleOption('No')">No</button>
-        <button onclick="handleOption('Others')">Others</button>
-      </div>
-    </div>
+      <h2>DCT 1</h2>
+    <div id="countdown"></div>
+    <div id="mic-container" style="display:none;">
+      <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
+      <div id="volume-bar"><div id="volume-level"></div></div>
+      <div id="timer"></div>
+        </div>
+    <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
 
-    <!-- ✅ DCT 2 Test Section -->
+    <!-- DCT 2 Test Section -->
     <div id="dct2">
-      <h3>DCT 2</h3>
-      <div id="video-container">
-        <video id="question-video-2" controls autoplay onended="checkForOptions()">
-          <source id="video-source-2" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
+      <h2>DCT 2</h2>
     </div>
 
-    <!-- ✅ DCT 3 Test Section -->
+     <!-- DCT 3 Test Section -->
     <div id="dct3">
-      <h3>DCT 3</h3>
-      <div id="video-container">
-        <video id="question-video-3" controls autoplay onended="checkForOptions()">
-          <source id="video-source-3" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
-      <div id="option-buttons">
-        <button onclick="handleOption('Yes')">Yes</button>
-        <button onclick="handleOption('No')">No</button>
-        <button onclick="handleOption('Others')">Others</button>
-      </div>
+      <h2>DCT 3</h2>
     </div>
-
-    <!-- ✅ Follow-up Section -->
-    <div id="followup">
-      <h3>Follow-up</h3>
-      <div id="video-container">
-        <video id="followup-video" controls autoplay>
-          <source id="followup-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
-    </div>
-
-    <!-- ✅ Progress Section -->
-    <div id="progress">
-      <h2>Your Progress</h2>
-      <p id="progressData"></p>
-      <button onclick="downloadProgress()">Download Progress</button>
-    </div>
-    
     <!-- Consent + Personal Info Section -->
     <div id="consent-form">
       <h2>Participant Information</h2>
@@ -355,6 +295,58 @@
       <label><input type="checkbox" id="consent-checkbox" /> I agree.（同意する）</label>
       <button onclick="validateConsent()">Start Test</button>
     </div>
+
+    <!-- Instruction Section -->
+    <div id="instruction">
+      <h2 id="instruction-title">Task Instructions</h2>
+      <div id="video-container">
+        <video id="instruction-video" controls muted autoplay playsinline onended="startTask()">
+        <source id="instruction-source" src="" type="video/mp4" />
+        </video>
+      </div>
+      <p id="instruction-text">Watch the video for task instructions.</p>
+      <button onclick="startTask()">Next</button>
+    </div>
+
+    <!-- Test Section -->
+    <div id="test">
+      <h3 id="task-title">DCT 1</h3>
+      <div id="video-container">
+        <video id="question-video" controls autoplay onended="checkForOptions()">
+          <source id="video-source" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+      <p id="feedback"></p>
+      <div id="option-buttons">
+        <button class="option-btn" onclick="handleOption('Yes')">Yes</button>
+        <button class="option-btn" onclick="handleOption('No')">No</button>
+        <button class="option-btn" onclick="handleOption('Others')">Others</button>
+      </div>
+    </div>
+
+    <!-- Follow-up Section -->
+    <div id="followup">
+      <h3>Follow-up Question</h3>
+      <div id="video-container">
+        <video id="followup-video" controls autoplay>
+          <source id="followup-source" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <!-- Progress Section -->
+    <div id="progress">
+      <h2>Your Progress</h2>
+      <p id="progressData">No attempts yet.</p>
+      <button onclick="downloadProgress()">Download Progress</button>
+    </div>
+  </div>
 
   <script>
     let videoIndex = 0;

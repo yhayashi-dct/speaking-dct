@@ -219,26 +219,10 @@
   </script>
 </head>
 <body>
-  <div class="container">
+   <div class="container">
     <h1>Welcome!</h1>
+
     <div id="status-message"></div>
-    <div id="countdown"></div>
-    <div id="mic-container" style="display:none;">
-      <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
-      <div id="volume-bar"><div id="volume-level"></div></div>
-      <div id="timer"></div>
-    </div>
-
-    <!-- DCT 1 Test Section -->
-    <div id="test">
-      <h2>DCT 1</h2>
-    </div>
-    <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
-
-    <!-- DCT 2 Test Section -->
-    <div id="dct2">
-      <h2>DCT 2</h2>
-    </div>
 
     <!-- Consent + Personal Info Section -->
     <div id="consent-form">
@@ -298,7 +282,7 @@
         <li>質問・問い合わせがある場合は研究代表者（林裕子）に連絡を取る。 (Email: yhayashi@cc.saga-u.ac.jp)</li>
       </ul>
       <label><input type="checkbox" id="consent-checkbox" /> I agree.（同意する）</label>
-       <button onclick="validateConsent()">Start Test</button>
+      <button onclick="validateConsent()">Start Test</button>
     </div>
 
     <!-- Instruction Section -->
@@ -306,7 +290,7 @@
       <h2 id="instruction-title">Task Instructions</h2>
       <div id="video-container">
         <video id="instruction-video" controls autoplay>
-          <source src="videos/DCT1_instructions.mp4" type="video/mp4" />
+          <source id="instruction-source" src="" type="video/mp4" />
         </video>
       </div>
       <p id="instruction-text">Watch the video for task instructions.</p>

@@ -148,10 +148,10 @@
 
     function startTimer() {
       timeLeft = 30;
-      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+      document.getElementById("timer").innerText = Time remaining: ${timeLeft} seconds;
       countdownInterval = setInterval(() => {
         timeLeft--;
-        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+        document.getElementById("timer").innerText = Time remaining: ${timeLeft} seconds;
         if (timeLeft <= 0) {
           clearInterval(countdownInterval);
           showStatusMessage("✅ Time is up. Submitting your answer...");
@@ -386,7 +386,7 @@
     function showInstruction(task) {
       taskIndex = task;
       document.getElementById('instruction').style.display = 'block';
-      document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+      document.getElementById('instruction-title').innerText = Task ${task + 1} Instructions;
       document.getElementById('instruction-source').src = instructionVideos[task];
       document.getElementById('instruction-video').load();
     }
@@ -419,10 +419,10 @@
 
     function startTimer() {
       timeLeft = 30;
-      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+      document.getElementById("timer").innerText = Time remaining: ${timeLeft} seconds;
       countdownInterval = setInterval(() => {
         timeLeft--;
-        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+        document.getElementById("timer").innerText = Time remaining: ${timeLeft} seconds;
         if (timeLeft <= 0) {
           clearInterval(countdownInterval);
           alert("Time is up!");
@@ -483,14 +483,14 @@
     function showProgress() {
       document.getElementById('test').style.display = 'none';
       document.getElementById('progress').style.display = 'block';
-      document.getElementById('progressData').innerText = `You answered ${answers.length} questions. Keep practicing!`;
+      document.getElementById('progressData').innerText = You answered ${answers.length} questions. Keep practicing!;
     }
 
     function downloadProgress() {
       let progressData = "Your Speaking Test Progress:\n\n";
       answers.forEach((answer, index) => {
         let taskName = index < 3 ? taskTitles[0] : index < 5 ? taskTitles[1] : taskTitles[2];
-        progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
+        progressData += ${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n;
       });
 
       const blob = new Blob([progressData], { type: 'text/plain' });
@@ -505,3 +505,4 @@
   </script>
 </body>
 </html>
+

@@ -5,7 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Language Speaking Test</title>
   <style>
-      body {
+   .form-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    .form-group label {
+      width: 160px;
+      margin-right: 10px;
+      text-align: right;
+    }
+    .form-group input[type="text"],
+    .form-group select {
+      flex: 1;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    select#level {
+      white-space: nowrap;
+    }
+
+    body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
@@ -246,16 +272,22 @@
     <!-- Consent + Personal Info Section -->
     <div id="consent-form">
       <h2>Participant Information</h2>
-      <div class="inline-group">
-        <div>
-          <label for="name">Name:</label>
-          <input type="text" id="name" required />
-        </div>
-        <div>
-          <label for="age">Age:</label>
-          <input type="text" id="age" required />
-        </div>
-      </div>
+
+  <!-- ✅ Line 1: Name and Age -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+    </div>
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <input type="text" id="age" required />
+    </div>
+  </div>
+
+  <!-- ✅ Line 2: First Language and English Proficiency Test -->
+  <div class="form-row">
+    <div class="form-group">
       <label for="language">First Language:</label>
       <select id="language" required>
         <option value="">-- Select --</option>
@@ -288,8 +320,17 @@
         <option value="IELTS">IELTS</option>
         <option value="Other">Other</option>
       </select>
-      <label for="score">Score/Qualification（得点／資格）:</label>
-      <input type="text" id="score" placeholder="e.g., TOEIC 600, 英検２級" required />
+  </div>
+ </div>
+
+      <!-- ✅ Line 3: Score -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="score">Score/Qualification（得点／資格）:</label>
+          <input type="text" id="score" placeholder="e.g., TOEIC 600, 英検２級" required />
+        </div>
+      </div>
+   
       <h2>Informed Consent</h2>
       <ul>
         <li>本研究は、佐賀大学教育学部准教授の林裕子が研究代表者として実施する研究である（科研費課題基盤研究(C)No. 22K00790）。</li>

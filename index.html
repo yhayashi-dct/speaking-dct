@@ -25,7 +25,7 @@
       display: block;
       width: 50%;
       padding: 10px;
-      margin-top: 20px;
+      margin: 20px auto;
       background-color: #FFA500;
       color: white;
       border: none;
@@ -35,9 +35,16 @@
       background-color: #FF8C00;
     }
     input[type="text"], select {
-      width: 40%;
+      width: 100%;
       padding: 8px;
       margin-top: 10px;
+    }
+    .inline-group {
+      display: flex;
+      gap: 20px;
+    }
+    .inline-group > div {
+      flex: 1;
     }
     #instruction, #test, #followup, #progress {
       margin-top: 20px;
@@ -74,30 +81,67 @@
     .option-btn:hover {
       background-color: #FF8C00;
     }
+    #status-message {
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      margin-top: 15px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Welcome!</h1>
 
+    <div id="status-message"></div>
+
     <!-- Consent + Personal Info Section -->
     <div id="consent-form">
       <h2>Participant Information</h2>
-      <label for="name">Name:</label>
-      <input type="text" id="name" required />
-      <label for="age">Age:</label>
-      <input type="text" id="age" required />
+      <div class="inline-group">
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" required />
+        </div>
+        <div>
+          <label for="age">Age:</label>
+          <input type="text" id="age" required />
+        </div>
+      </div>
       <label for="language">First Language:</label>
-      <input type="text" id="language" required />
-      <label for="level">English Proficiency Level（英語力）:</label>
-      <select id="level">
-        <option value="TOEIC">TOEIC</option>
-        <option value="EIKEN（英検）">EIKEN</option>
-        <option value="TOEFL iBT">TOEFL iBT</option>
-        <option value="IELTS">IELTS</option>
+      <select id="language" required>
+        <option value="">-- Select --</option>
+        <option value="English">English</option>
+        <option value="Mandarin Chinese">Mandarin Chinese</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Spanish">Spanish</option>
+        <option value="French">French</option>
+        <option value="Arabic">Arabic</option>
+        <option value="Bengali">Bengali</option>
+        <option value="Russian">Russian</option>
+        <option value="Portuguese">Portuguese</option>
+        <option value="Urdu">Urdu</option>
+        <option value="Indonesian">Indonesian</option>
+        <option value="German">German</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Korean">Korean</option>
+        <option value="Vietnamese">Vietnamese</option>
+        <option value="Italian">Italian</option>
+        <option value="Turkish">Turkish</option>
+        <option value="Thai">Thai</option>
+        <option value="Other">Other</option>
       </select>
-　　　<label for="Score/Qualification （得点／資格）（例：TOEIC 600, 英検２級） ">Score/Qualification:</label>
-　　 <input type="text" id="score/qualification" required />
+      <label for="level">English Proficiency Test:</label>
+      <select id="level">
+        <option value="">-- Select --</option>
+        <option value="TOEIC">TOEIC</option>
+        <option value="EIKEN">EIKEN（英検）</option>
+        <option value="TOEFL">TOEFL iBT</option>
+        <option value="IELTS">IELTS</option>
+        <option value="Other">Other</option>
+      </select>
+      <label for="score">Score/Qualification（得点／資格）:</label>
+      <input type="text" id="score" placeholder="e.g., TOEIC 600, 英検２級" required />
       <h2>Informed Consent</h2>
       <ul>
         <li>本研究は、佐賀大学教育学部准教授の林裕子が研究代表者として実施する研究である（科研費課題基盤研究(C)No. 22K00790）。</li>

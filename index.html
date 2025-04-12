@@ -113,16 +113,24 @@
     function validateConsent() {
       const checkbox = document.getElementById('consent-checkbox');
       if (!checkbox.checked) {
-        showStatusMessage('✅ You must agree to the informed consent to proceed.');
-        return false;
+        document.getElementById('status-message').innerText = '✅ You must agree to the informed consent to proceed.';
+        return;
       }
-      showStatusMessage('✅ Thank you for your consent. Starting the test...');
       document.getElementById('consent-form').style.display = 'none';
-      document.getElementById('test').style.display = 'block';
-      startCountdown();
-      return true;
+      document.getElementById('instruction').style.display = 'block';
+      document.getElementById('instruction-video').play();
+      document.getElementById('status-message').innerText = '✅ Thank you for your consent. Starting the test...';
     }
 
+    function goToNextTask(nextSectionId) {
+      const sections = ['instruction', 'test', 'dct2', 'dct3', 'progress'];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      const next = document.getElementById(nextSectionId);
+      if (next) next.style.display = 'block';
+    }
     function startCountdown() {
       const countdownDisplay = document.getElementById('countdown');
       countdownDisplay.style.display = 'block';

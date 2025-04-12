@@ -34,39 +34,6 @@
     button:hover {
       background-color: #FF8C00;
     }
-    input[type="text"], select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 10px;
-    }
-    .inline-group {
-      display: flex;
-      gap: 20px;
-    }
-    .inline-group > div {
-      flex: 1;
-    }
-    .inline-group input[type="text"] {
-      width: 90%;
-    }
-    #instruction, #test, #followup, #progress, #dct2 {
-      margin-top: 20px;
-      display: none;
-    }
-    #video-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-    video {
-      width: 80%;
-      height: auto;
-    }
-    #timer {
-      text-align: center;
-      font-size: 18px;
-      color: red;
-      margin-top: 10px;
-    }
     #mic-container {
       text-align: center;
       margin-top: 20px;
@@ -94,118 +61,53 @@
       color: #333;
       display: none;
     }
+    #timer {
+      text-align: center;
+      font-size: 18px;
+      color: red;
+      margin-top: 10px;
+    }
     #status-message {
       text-align: center;
       font-weight: bold;
       color: #333;
       margin-top: 15px;
     }
+    video {
+      width: 80%;
+      height: auto;
+    }
+    .inline-group {
+      display: flex;
+      gap: 20px;
+    }
+    .inline-group > div {
+      flex: 1;
+    }
+    .inline-group input[type="text"] {
+      width: 100%;
+    }
   </style>
   <script>
-    let countdownInterval;
-    let timeLeft = 30;
-    let micStream, audioContext, analyser, dataArray;
-
-    function showStatusMessage(message) {
-      document.getElementById('status-message').innerText = message;
-    }
-
     function validateConsent() {
-  const checkbox = document.getElementById('consent-checkbox');
-  if (!checkbox.checked) {
-    showStatusMessage('✅ You must agree to the informed consent to proceed.');
-    return false;
-  }
-  showStatusMessage('✅ Thank you for your consent. Starting the test...');
-  document.getElementById('consent-form').style.display = 'none';
-  document.getElementById('instruction').style.display = 'block';
-  return true;
-}
-
-    function startCountdown() {
-      const countdownDisplay = document.getElementById('countdown');
-      countdownDisplay.style.display = 'block';
-      let seconds = 5;
-      countdownDisplay.innerText = seconds;
-      const interval = setInterval(() => {
-        seconds--;
-        countdownDisplay.innerText = seconds;
-        if (seconds <= 0) {
-          clearInterval(interval);
-          countdownDisplay.style.display = 'none';
-          startRecording();
-        }
-      }, 1000);
+      const checkbox = document.getElementById('consent-checkbox');
+      if (!checkbox.checked) {
+        document.getElementById('status-message').innerText = '✅ You must agree to the informed consent to proceed.';
+        return;
+      }
+      document.getElementById('consent-form').style.display = 'none';
+      document.getElementById('instruction').style.display = 'block';
+      document.getElementById('status-message').innerText = '✅ Thank you for your consent. Starting the test...';
     }
 
-    function startRecording() {
-      showStatusMessage("✅ Recording started. Speak now.");
-      document.getElementById('mic-container').style.display = 'block';
-      startVolumeMeter();
-      startTimer();
-    }
-
-    function startTimer() {
-      timeLeft = 30;
-      document.getElementById("timer").innerText = Time remaining: ${timeLeft} seconds;
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = Time remaining: ${timeLeft} seconds;
-        if (timeLeft <= 0) {
-          clearInterval(countdownInterval);
-          showStatusMessage("✅ Time is up. Submitting your answer...");
-          stopVolumeMeter();
-          submitAnswer();
-        }
-      }, 1000);
-    }
-
-    function submitAnswer() {
-      clearInterval(countdownInterval);
-      showStatusMessage("✅ Answer submitted.");
-      document.getElementById('mic-container').style.display = 'none';
-      document.getElementById('next-button').style.display = 'block';
-    }
-
-    function goToNextTask() {
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('next-button').style.display = 'none';
-      document.getElementById('dct2').style.display = 'block';
-      showStatusMessage('✅ Now starting DCT 2');
-      startCountdown();
-    }
-
-    function startVolumeMeter() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaStreamSource(stream);
-        analyser = audioContext.createAnalyser();
-        source.connect(analyser);
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-
-        function updateVolume() {
-          analyser.getByteFrequencyData(dataArray);
-          let sum = dataArray.reduce((a, b) => a + b, 0);
-          let average = sum / dataArray.length;
-          let percent = Math.min(100, Math.max(0, average / 2));
-          document.getElementById('volume-level').style.width = percent + '%';
-          requestAnimationFrame(updateVolume);
-        }
-
-        updateVolume();
+    function goToNextTask(nextSectionId) {
+      const sections = ['instruction', 'test', 'dct2', 'dct3', 'progress'];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
       });
-    }
-
-    function stopVolumeMeter() {
-      if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-      }
-      if (audioContext) {
-        audioContext.close();
-      }
+      const next = document.getElementById(nextSectionId);
+      if (next) next.style.display = 'block';
     }
   </script>
 </head>
@@ -220,18 +122,7 @@
       <div id="timer"></div>
     </div>
 
-    <!-- DCT 1 Test Section -->
-    <div id="test">
-      <h2>DCT 1</h2>
-    </div>
-    <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
-
-    <!-- DCT 2 Test Section -->
-    <div id="dct2">
-      <h2>DCT 2</h2>
-    </div>
-
-    <!-- Consent + Personal Info Section -->
+    <!-- Consent and Personal Info Section -->
     <div id="consent-form">
       <h2>Participant Information</h2>
       <div class="inline-group">
@@ -293,53 +184,41 @@
     </div>
 
     <!-- Instruction Section -->
-    <div id="instruction">
+    <div id="instruction" style="display:none;">
       <h2 id="instruction-title">Task Instructions</h2>
-      <div id="video-container">
-        <video id="instruction-video" controls autoplay>
-          <source id="instruction-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <p id="instruction-text">Watch the video for task instructions.</p>
-      <button onclick="startTask()">Next</button>
+      <video id="instruction-video" controls autoplay onended="goToNextTask('test')">
+        <source src="videos/DCT1_instructions.mp4" type="video/mp4" />
+      </video>
     </div>
 
-    <!-- Test Section -->
-    <div id="test">
-      <h3 id="task-title">DCT 1</h3>
-      <div id="video-container">
-        <video id="question-video" controls autoplay onended="checkForOptions()">
-          <source id="video-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
-      <p id="feedback"></p>
-      <div id="option-buttons">
-        <button class="option-btn" onclick="handleOption('Yes')">Yes</button>
-        <button class="option-btn" onclick="handleOption('No')">No</button>
-        <button class="option-btn" onclick="handleOption('Others')">Others</button>
-      </div>
+    <!-- DCT Sections -->
+    <div id="test" style="display:none;">
+      <h2>DCT 1</h2>
+      <video id="test-video" autoplay onended="startCountdown()">
+        <source src="videos/DCT1_Q1.mp4" type="video/mp4" />
+      </video>
     </div>
+    <button id="next-button" style="display:none;" onclick="goToNextTask('dct2')">Next</button>
 
-    <!-- Follow-up Section -->
-    <div id="followup">
-      <h3>Follow-up Question</h3>
-      <div id="video-container">
-        <video id="followup-video" controls autoplay>
-          <source id="followup-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
+    <div id="dct2" style="display:none;">
+      <h2>DCT 2</h2>
+      <video id="dct2-video" autoplay onended="startCountdown()">
+        <source src="videos/DCT2_Q1.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <button id="next-button-dct2" style="display:none;" onclick="goToNextTask('dct3')">Next</button>
+
+    <div id="dct3" style="display:none;">
+      <h2>DCT 3</h2>
+      <video id="dct3-video" autoplay onended="startCountdown()">
+        <source src="videos/DCT3_Q1.mp4" type="video/mp4" />
+      </video>
     </div>
 
     <!-- Progress Section -->
-    <div id="progress">
+    <div id="progress" style="display:none;">
       <h2>Your Progress</h2>
-      <p id="progressData">No attempts yet.</p>
+      <p id="progressData">You have completed all tasks. Thank you!</p>
       <button onclick="downloadProgress()">Download Progress</button>
     </div>
   </div>

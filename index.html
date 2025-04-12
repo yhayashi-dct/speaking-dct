@@ -113,24 +113,16 @@
     function validateConsent() {
       const checkbox = document.getElementById('consent-checkbox');
       if (!checkbox.checked) {
-        document.getElementById('status-message').innerText = '✅ You must agree to the informed consent to proceed.';
-        return;
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
+        return false;
       }
+      showStatusMessage('✅ Thank you for your consent. Starting the test...');
       document.getElementById('consent-form').style.display = 'none';
-      document.getElementById('instruction').style.display = 'block';
-      document.getElementById('instruction-video').play();
-      document.getElementById('status-message').innerText = '✅ Thank you for your consent. Starting the test...';
+      document.getElementById('test').style.display = 'block';
+      startCountdown();
+      return true;
     }
 
-    function goToNextTask(nextSectionId) {
-      const sections = ['instruction', 'test', 'dct2', 'dct3', 'progress'];
-      sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      const next = document.getElementById(nextSectionId);
-      if (next) next.style.display = 'block';
-    }
     function startCountdown() {
       const countdownDisplay = document.getElementById('countdown');
       countdownDisplay.style.display = 'block';
@@ -221,8 +213,32 @@
 <body>
   <div class="container">
     <h1>Welcome!</h1>
-
     <div id="status-message"></div>
+    <div id="countdown"></div>
+    <div id="mic-container" style="display:none;">
+      <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
+      <div id="volume-bar"><div id="volume-level"></div></div>
+      <div id="timer"></div>
+    </div>
+
+      <!-- Instruction Section -->
+    <div id="instruction" style="display:none;">
+      <h2 id="instruction-title">Task Instructions</h2>
+      <video id="instruction-video" controls autoplay muted onended="goToNextTask('test')">
+        <source src="videos/DCT1_instructions.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- DCT 1 Test Section -->
+    <div id="test">
+      <h2>DCT 1</h2>
+    </div>
+    <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
+
+    <!-- DCT 2 Test Section -->
+    <div id="dct2">
+      <h2>DCT 2</h2>
+    </div>
 
     <!-- Consent + Personal Info Section -->
     <div id="consent-form">
@@ -289,7 +305,7 @@
     <div id="instruction">
       <h2 id="instruction-title">Task Instructions</h2>
       <div id="video-container">
-        <video id="instruction-video" controls autoplay>
+        <video id="instruction-video" controls autoplay muted onended="goToNextTask('test')">>
           <source id="instruction-source" src="" type="video/mp4" />
         </video>
       </div>
@@ -354,7 +370,7 @@
       "videos/DCT 1 Q1.mp4",
       "videos/DCT 1 Q2.mp4",
       "videos/DCT 1 Q3.mp4",
-      "videos/DCT 1 Q1.mp4",
+      "videos/DCT2 Q1.mp4",
       "videos/DCT2 Q2.mp4",
       "videos/DCT_split questions_Q1.mp4"
     ];

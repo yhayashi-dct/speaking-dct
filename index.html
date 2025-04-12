@@ -49,7 +49,7 @@
     .inline-group input[type="text"] {
       width: 90%;
     }
-    #instruction, #test, #followup, #progress {
+    #instruction, #test, #followup, #progress, #dct2 {
       margin-top: 20px;
       display: none;
     }
@@ -67,22 +67,32 @@
       color: red;
       margin-top: 10px;
     }
-    #option-buttons {
-      display: none;
+    #mic-container {
       text-align: center;
       margin-top: 20px;
     }
-    .option-btn {
-      display: inline-block;
-      margin: 0 10px;
-      padding: 10px 20px;
-      background-color: #FFA500;
-      color: white;
-      border: none;
-      cursor: pointer;
+    #mic-icon {
+      width: 50px;
+      height: 50px;
     }
-    .option-btn:hover {
-      background-color: #FF8C00;
+    #volume-bar {
+      width: 200px;
+      height: 20px;
+      background-color: #ccc;
+      margin: 10px auto;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    #volume-level {
+      height: 100%;
+      background-color: green;
+      width: 0%;
+    }
+    #countdown {
+      text-align: center;
+      font-size: 24px;
+      color: #333;
+      display: none;
     }
     #status-message {
       text-align: center;
@@ -91,12 +101,136 @@
       margin-top: 15px;
     }
   </style>
+  <script>
+    let countdownInterval;
+    let timeLeft = 30;
+    let micStream, audioContext, analyser, dataArray;
+
+    function showStatusMessage(message) {
+      document.getElementById('status-message').innerText = message;
+    }
+
+    function validateConsent() {
+      const checkbox = document.getElementById('consent-checkbox');
+      if (!checkbox.checked) {
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
+        return false;
+      }
+      showStatusMessage('✅ Thank you for your consent. Starting the test...');
+      document.getElementById('consent-form').style.display = 'none';
+      document.getElementById('test').style.display = 'block';
+      startCountdown();
+      return true;
+    }
+
+    function startCountdown() {
+      const countdownDisplay = document.getElementById('countdown');
+      countdownDisplay.style.display = 'block';
+      let seconds = 5;
+      countdownDisplay.innerText = seconds;
+      const interval = setInterval(() => {
+        seconds--;
+        countdownDisplay.innerText = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          countdownDisplay.style.display = 'none';
+          startRecording();
+        }
+      }, 1000);
+    }
+
+    function startRecording() {
+      showStatusMessage("✅ Recording started. Speak now.");
+      document.getElementById('mic-container').style.display = 'block';
+      startVolumeMeter();
+      startTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 30;
+      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          showStatusMessage("✅ Time is up. Submitting your answer...");
+          stopVolumeMeter();
+          submitAnswer();
+        }
+      }, 1000);
+    }
+
+    function submitAnswer() {
+      clearInterval(countdownInterval);
+      showStatusMessage("✅ Answer submitted.");
+      document.getElementById('mic-container').style.display = 'none';
+      document.getElementById('next-button').style.display = 'block';
+    }
+
+    function goToNextTask() {
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('next-button').style.display = 'none';
+      document.getElementById('dct2').style.display = 'block';
+      showStatusMessage('✅ Now starting DCT 2');
+      startCountdown();
+    }
+
+    function startVolumeMeter() {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        micStream = stream;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+        analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        function updateVolume() {
+          analyser.getByteFrequencyData(dataArray);
+          let sum = dataArray.reduce((a, b) => a + b, 0);
+          let average = sum / dataArray.length;
+          let percent = Math.min(100, Math.max(0, average / 2));
+          document.getElementById('volume-level').style.width = percent + '%';
+          requestAnimationFrame(updateVolume);
+        }
+
+        updateVolume();
+      });
+    }
+
+    function stopVolumeMeter() {
+      if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+      }
+      if (audioContext) {
+        audioContext.close();
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="container">
     <h1>Welcome!</h1>
-
     <div id="status-message"></div>
+    <div id="countdown"></div>
+    <div id="mic-container" style="display:none;">
+      <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
+      <div id="volume-bar"><div id="volume-level"></div></div>
+      <div id="timer"></div>
+    </div>
+
+    <!-- DCT 1 Test Section -->
+    <div id="test">
+      <h2>DCT 1</h2>
+    </div>
+    <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
+
+    <!-- DCT 2 Test Section -->
+    <div id="dct2">
+      <h2>DCT 2</h2>
+    </div>
 
     <!-- Consent + Personal Info Section -->
     <div id="consent-form">

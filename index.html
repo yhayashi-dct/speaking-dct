@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Language Speaking Test</title>
   <style>
-    body {
+      body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
@@ -34,14 +34,25 @@
     button:hover {
       background-color: #FF8C00;
     }
-     input[type="text"], select {
-      width: 100%;
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      width: 220px;
+      margin-right: 10px;
+      text-align: right;
+      display: inline-block;
+    }
+    .form-group input[type="text"],
+    .form-group select {
+      flex: 1;
       padding: 8px;
-      margin-top: 5px;
       box-sizing: border-box;
     }
-    .form-group {
-      margin-bottom: 20px;
+    select#level {
+      white-space: nowrap;
     }
     #instruction, #test, #followup, #progress, #dct2 {
       margin-top: 20px;

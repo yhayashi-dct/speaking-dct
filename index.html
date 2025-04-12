@@ -294,35 +294,60 @@
     </div>
 
     <!-- Instruction Section -->
-    <div id="instruction">
-      <h2 id="instruction-title">Task Instructions</h2>
-      <div id="video-container">
-        <video id="instruction-video" controls muted autoplay playsinline onended="startTask()">
-        <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <p id="instruction-text">Watch the video for task instructions.</p>
-      <button onclick="startTask()">Next</button>
+   <div id="instruction" style="display:none;">
+            <h2 id="instruction-title">Task Instructions</h2>
+            <div id="video-container">
+                <video id="instructionVideos" controls autoplay>
+                    <source id="instruction-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <p id="instruction-text">Watch the video for task instructions.</p>
+            <button onclick="startTask()">Next</button>
     </div>
 
-    <!-- Test Section -->
+    <!-- ✅ DCT 1 Test Section -->
     <div id="test">
-      <h3 id="task-title">DCT 1</h3>
+      <h3>DCT 1</h3>
       <div id="video-container">
-        <video id="question-video" controls autoplay onended="checkForOptions()">
-          <source id="video-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
+        <video id="DCT1videos" controls autoplay>
+        <source id="video-source" src="" type="video/mp4" />
         </video>
       </div>
       <div id="timer">Time remaining: 30 seconds</div>
       <button onclick="startCountdown()">Record Answer</button>
       <button onclick="submitAnswer()">Submit</button>
-      <p id="feedback"></p>
-      <div id="option-buttons">
-        <button class="option-btn" onclick="handleOption('Yes')">Yes</button>
-        <button class="option-btn" onclick="handleOption('No')">No</button>
-        <button class="option-btn" onclick="handleOption('Others')">Others</button>
-      </div>
     </div>
+
+       <!-- ✅ DCT 2 Test Section -->
+    <div id="dct2">
+      <h3>DCT 2</h3>
+      <div id="video-container">
+        <video id="DCT2videos" controls autoplay onended="checkForOptions()">
+          <source id="video-source-2" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <!-- ✅ DCT 3 Test Section -->
+    <div id="dct3">
+      <h3>DCT 3</h3>
+      <div id="video-container">
+        <video id="DC31videos" controls autoplay onended="checkForOptions()">
+          <source id="video-source-3" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+      <div id="option-buttons">
+        <button onclick="handleOption('Yes')">Yes</button>
+        <button onclick="handleOption('No')">No</button>
+        <button onclick="handleOption('Others')">Others</button>
+        </div>
 
     <!-- Follow-up Section -->
     <div id="followup">
@@ -358,14 +383,21 @@
       "videos/DCT2 instructions.mp4",
       "videos/DCT_split questions_instructions.mp4"
     ];
-    const videos = [
+    const DCT1videos = [
       "videos/DCT 1 Q1.mp4",
       "videos/DCT 1 Q2.mp4",
       "videos/DCT 1 Q3.mp4",
+      ];
+    
+    const DCT2videos = [
       "videos/DCT2 Q1.mp4",
       "videos/DCT2 Q2.mp4",
+     ];
+
+     const DCT3videos = [
       "videos/DCT_split questions_Q1.mp4"
     ];
+    
     const followupVideos = {
       Yes: "videos/DCT_split questions Q1_yes.mp4",
       No: "videos/DCT_split questions Q1_no.mp4",

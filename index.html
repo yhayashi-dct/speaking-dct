@@ -221,14 +221,6 @@
       <div id="timer"></div>
     </div>
 
-      <!-- Instruction Section -->
-    <div id="instruction" style="display:none;">
-      <h2 id="instruction-title">Task Instructions</h2>
-      <video id="instruction-video" controls autoplay muted onended="goToNextTask('test')">
-        <source src="videos/DCT1_instructions.mp4" type="video/mp4" />
-      </video>
-    </div>
-
     <!-- DCT 1 Test Section -->
     <div id="test">
       <h2>DCT 1</h2>
@@ -305,8 +297,8 @@
     <div id="instruction">
       <h2 id="instruction-title">Task Instructions</h2>
       <div id="video-container">
-        <video id="instruction-video" controls autoplay muted onended="goToNextTask('test')">>
-          <source id="instruction-source" src="" type="video/mp4" />
+        <video id="instruction-video" controls muted autoplay playsinline onended="startTask()">
+        <source id="instruction-source" src="" type="video/mp4" />
         </video>
       </div>
       <p id="instruction-text">Watch the video for task instructions.</p>
@@ -388,7 +380,7 @@
         return;
       }
       document.getElementById('consent-form').style.display = 'none';
-      showInstruction(0);
+      showInstruction(0); // ✅ Shows the instruction video for Task 1
     }
 
     function showInstruction(task) {
@@ -396,7 +388,12 @@
       document.getElementById('instruction').style.display = 'block';
       document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
       document.getElementById('instruction-source').src = instructionVideos[task];
-      document.getElementById('instruction-video').load();
+      const video = document.getElementById('instruction-video');
+      video.load();
+      video.muted = true;                       // Required for autoplay
+      video.setAttribute('playsinline', '');    // Avoid full screen on iOS
+      video.play();                             // Manually trigger playback
+
     }
 
     function startTask() {

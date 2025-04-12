@@ -214,16 +214,12 @@
   <div class="container">
     <h1>Welcome!</h1>
     <div id="status-message"></div>
-   
+    </div>
+
     <!-- DCT 1 Test Section -->
     <div id="test">
       <h2>DCT 1</h2>
-    <div id="countdown"></div>
-    <div id="mic-container" style="display:none;">
-      <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
-      <div id="volume-bar"><div id="volume-level"></div></div>
-      <div id="timer"></div>
-        </div>
+    </div>
     <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
 
     <!-- DCT 2 Test Section -->
@@ -231,11 +227,12 @@
       <h2>DCT 2</h2>
     </div>
 
-     <!-- DCT 3 Test Section -->
+  <!-- DCT 3 Test Section -->
     <div id="dct3">
       <h2>DCT 3</h2>
     </div>
-    <!-- Consent + Personal Info Section -->
+
+  <!-- Consent + Personal Info Section -->
     <div id="consent-form">
       <h2>Participant Information</h2>
       <div class="inline-group">
@@ -308,9 +305,9 @@
       <button onclick="startTask()">Next</button>
     </div>
 
-    <!-- Test Section -->
+    <!-- ✅ DCT 1 Test Section -->
     <div id="test">
-      <h3 id="task-title">DCT 1</h3>
+      <h3>DCT 1</h3>
       <div id="video-container">
         <video id="question-video" controls autoplay onended="checkForOptions()">
           <source id="video-source" src="" type="video/mp4" />
@@ -319,11 +316,41 @@
       <div id="timer">Time remaining: 30 seconds</div>
       <button onclick="startCountdown()">Record Answer</button>
       <button onclick="submitAnswer()">Submit</button>
-      <p id="feedback"></p>
       <div id="option-buttons">
-        <button class="option-btn" onclick="handleOption('Yes')">Yes</button>
-        <button class="option-btn" onclick="handleOption('No')">No</button>
-        <button class="option-btn" onclick="handleOption('Others')">Others</button>
+        <button onclick="handleOption('Yes')">Yes</button>
+        <button onclick="handleOption('No')">No</button>
+        <button onclick="handleOption('Others')">Others</button>
+      </div>
+    </div>
+
+    <!-- ✅ DCT 2 Test Section -->
+    <div id="dct2">
+      <h3>DCT 2</h3>
+      <div id="video-container">
+        <video id="question-video-2" controls autoplay onended="checkForOptions()">
+          <source id="video-source-2" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <!-- ✅ DCT 3 Test Section -->
+    <div id="dct3">
+      <h3>DCT 3</h3>
+      <div id="video-container">
+        <video id="question-video-3" controls autoplay onended="checkForOptions()">
+          <source id="video-source-3" src="" type="video/mp4" />
+        </video>
+      </div>
+      <div id="timer">Time remaining: 30 seconds</div>
+      <button onclick="startCountdown()">Record Answer</button>
+      <button onclick="submitAnswer()">Submit</button>
+      <div id="option-buttons">
+        <button onclick="handleOption('Yes')">Yes</button>
+        <button onclick="handleOption('No')">No</button>
+        <button onclick="handleOption('Others')">Others</button>
       </div>
     </div>
 

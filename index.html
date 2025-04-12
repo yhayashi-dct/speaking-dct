@@ -111,17 +111,16 @@
     }
 
     function validateConsent() {
-      const checkbox = document.getElementById('consent-checkbox');
-      if (!checkbox.checked) {
-        showStatusMessage('✅ You must agree to the informed consent to proceed.');
-        return false;
-      }
-      showStatusMessage('✅ Thank you for your consent. Starting the test...');
-      document.getElementById('consent-form').style.display = 'none';
-      document.getElementById('test').style.display = 'block';
-      startCountdown();
-      return true;
-    }
+  const checkbox = document.getElementById('consent-checkbox');
+  if (!checkbox.checked) {
+    showStatusMessage('✅ You must agree to the informed consent to proceed.');
+    return false;
+  }
+  showStatusMessage('✅ Thank you for your consent. Starting the test...');
+  document.getElementById('consent-form').style.display = 'none';
+  document.getElementById('instruction').style.display = 'block';
+  return true;
+}
 
     function startCountdown() {
       const countdownDisplay = document.getElementById('countdown');

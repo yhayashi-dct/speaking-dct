@@ -302,11 +302,12 @@
     </div>
 
     <!-- Instruction Section -->
-   <div id="instruction" style="display:none;">
+    <div id="instruction">
       <h2 id="instruction-title">Task Instructions</h2>
-      <video id="instruction-video" controls autoplay muted onended="goToNextTask('test')">
-        <source src="videos/DCT1_instructions.mp4" type="video/mp4" />
-      </video>
+      <div id="video-container">
+        <video id="instruction-video" controls autoplay>
+          <source id="instruction-source" src="" type="video/mp4" />
+        </video>
       </div>
       <p id="instruction-text">Watch the video for task instructions.</p>
       <button onclick="startTask()">Next</button>

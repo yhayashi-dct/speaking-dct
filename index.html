@@ -426,14 +426,16 @@
     let answers = [];
 
     function validateConsent() {
-      const checkbox = document.getElementById('consent-checkbox');
-      if (!checkbox.checked) {
-        alert('You must agree to the informed consent to proceed.');
-        return;
-      }
-      document.getElementById('consent-form').style.display = 'none';
-      showInstruction(0); // ✅ Shows the instruction video for Task 1
+    const checkbox = document.getElementById('consent-checkbox');
+    if (!checkbox.checked) {
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
+        return false;
     }
+    showStatusMessage('✅ Thank you for your consent.');
+    document.getElementById('consent-form').style.display = 'none';
+    showInstruction(0); // Display the instruction video section
+    return true;
+}
 
     function showInstruction(task) {
       taskIndex = task;

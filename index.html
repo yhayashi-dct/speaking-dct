@@ -425,7 +425,7 @@
     };
     let answers = [];
 
-    function validateConsent() {
+ function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
     if (!checkbox.checked) {
         showStatusMessage('✅ You must agree to the informed consent to proceed.');
@@ -433,7 +433,7 @@
     }
     showStatusMessage('✅ Thank you for your consent.');
     document.getElementById('consent-form').style.display = 'none';
-    showInstruction(0); // Display the instruction video section
+    showInstruction(0); // ✅ Displays the instruction video section for Task 1
     return true;
 }
 

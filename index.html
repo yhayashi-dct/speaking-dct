@@ -147,18 +147,17 @@
       document.getElementById('status-message').innerText = message;
     }
 
-    function validateConsent() {
-      const checkbox = document.getElementById('consent-checkbox');
-      if (!checkbox.checked) {
+   function validateConsent() {
+    const checkbox = document.getElementById('consent-checkbox');
+    if (!checkbox.checked) {
         showStatusMessage('✅ You must agree to the informed consent to proceed.');
         return false;
-      }
-      showStatusMessage('✅ Thank you for your consent. Starting the test...');
-      document.getElementById('consent-form').style.display = 'none';
-      document.getElementById('test').style.display = 'block';
-      startCountdown();
-      return true;
     }
+    showStatusMessage('✅ Thank you for your consent.');
+    document.getElementById('consent-form').style.display = 'none';
+    showInstruction(0); // Ensure this is the only call after consent
+    return true;
+}
 
     function startCountdown() {
       const countdownDisplay = document.getElementById('countdown');
@@ -434,16 +433,17 @@ function validateConsent() {
     showStatusMessage('✅ Thank you for your consent.');
     document.getElementById('consent-form').style.display = 'none';
     showInstruction(0); // Ensure the instruction video is displayed first
+    console.log('Consent validated. Showing instruction page...');
     return true;
 }
 
 function showInstruction(task) {
     taskIndex = task;
     document.getElementById('instruction').style.display = 'block';
-    console.log(document.getElementById('instruction').style.display); // Debugging visibility
+    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debug visibility
     document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
-    document.getElementById('instruction-source').src = instructionVideos[task]; // Set video source
-    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debugging video source
+    document.getElementById('instruction-source').src = instructionVideos[task];
+    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
     const video = document.getElementById('instruction-video');
     video.load();
     video.muted = true; // Required for autoplay
@@ -454,6 +454,8 @@ function showInstruction(task) {
 function startTask() {
     document.getElementById('instruction').style.display = 'none'; // Hide instruction video
     document.getElementById('test').style.display = 'block'; // Show test section
+    console.log('Transitioning to test page'); // Debug transition
+    console.log('Test page displayed.');
 }
 
     function loadVideo(index) {

@@ -437,18 +437,18 @@
     return true;
 }
 
-    function showInstruction(task) {
-      taskIndex = task;
-      document.getElementById('instruction').style.display = 'block';
-      document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
-      document.getElementById('instruction-source').src = instructionVideos[task];
-      const video = document.getElementById('instruction-video');
-      video.load();
-      video.muted = true;                       // Required for autoplay
-      video.setAttribute('playsinline', '');    // Avoid full screen on iOS
-      video.play();                             // Manually trigger playback
-
-    }
+ function showInstruction(task) {
+    taskIndex = task;
+    document.getElementById('instruction').style.display = 'block';
+    console.log(document.getElementById('instruction').style.display); // Debugging visibility
+    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+    document.getElementById('instruction-source').src = instructionVideos[task];
+    const video = document.getElementById('instruction-video');
+    video.load();
+    video.muted = true; // Required for autoplay
+    video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
+    video.play(); // Play the video
+}
 
     function startTask() {
       document.getElementById('instruction').style.display = 'none';

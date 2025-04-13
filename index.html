@@ -86,10 +86,10 @@
     select#level {
       white-space: nowrap;
     }
-   #instruction {
+   #instruction, #test, #followup, #progress, #dct2 {
     margin-top: 20px;
-    /* display: none; */ /* Remove this line */
-   }
+    display: none; /* Ensure these sections are hidden initially */
+}
     #video-container {
       text-align: center;
       margin-top: 20px;
@@ -105,26 +105,29 @@
       margin-top: 10px;
     }
     #mic-container {
-      text-align: center;
-      margin-top: 20px;
-    }
+    text-align: center;
+    margin-top: 20px;
+}
+
     #mic-icon {
-      width: 50px;
-      height: 50px;
-    }
-    #volume-bar {
-      width: 200px;
-      height: 20px;
-      background-color: #ccc;
-      margin: 10px auto;
-      border-radius: 5px;
-      overflow: hidden;
-    }
+    width: 50px;
+    height: 50px;
+}
+
+   #volume-bar {
+    width: 200px;
+    height: 20px;
+    background-color: #ccc;
+    margin: 10px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
     #volume-level {
-      height: 100%;
-      background-color: green;
-      width: 0%;
-    }
+    height: 100%;
+    background-color: green;
+    width: 0%; /* Adjust dynamically */
+}
     #countdown {
       text-align: center;
       font-size: 24px;
@@ -203,8 +206,12 @@
       document.getElementById('mic-container').style.display = 'none';
       document.getElementById('next-button').style.display = 'block';
     }
-
-    function goToNextTask() {
+     function showMicAndGauge() {
+      const micContainer = document.getElementById('mic-container');
+      micContainer.style.display = 'block'; // Make the microphone and gauge visible
+      console.log('Microphone and gauge bar are now visible.');
+    }
+     function goToNextTask() {
       document.getElementById('test').style.display = 'none';
       document.getElementById('next-button').style.display = 'none';
       document.getElementById('dct2').style.display = 'block';
@@ -255,17 +262,6 @@
       <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="microphone icon" />
       <div id="volume-bar"><div id="volume-level"></div></div>
       <div id="timer"></div>
-    </div>
-
-    <!-- DCT 1 Test Section -->
-    <div id="test">
-      <h2>DCT 1</h2>
-    </div>
-    <button id="next-button" style="display:none;" onclick="goToNextTask()">Next</button>
-
-    <!-- DCT 2 Test Section -->
-    <div id="dct2">
-      <h2>DCT 2</h2>
     </div>
 
     <!-- Consent + Personal Info Section -->
@@ -345,18 +341,15 @@
     </div>
 
     <!-- Instruction Section -->
-    <div id="instruction">
-      <h2 id="instruction-title">Task Instructions</h2>
-      <div id="video-container">
-        <video id="instruction-video" controls muted autoplay playsinline onended="startTask()">
-        <source id="instruction-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <p id="instruction-text">Watch the video for task instructions.</p>
-      <button onclick="startTask()">Next</button>
-    </div>
+  <div id="instruction">
+  <h2>Instructions</h2>
+  <video id="instruction-video" controls autoplay onended="startTask()">
+    <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
+  </video>
+  <p>Watch the instruction video carefully to proceed.</p>
+</div>
 
-    <!-- Test Section -->
+      <!-- DCT 1 Section -->
     <div id="test">
       <h3 id="task-title">DCT 1</h3>
       <div id="video-container">
@@ -367,34 +360,50 @@
       <div id="timer">Time remaining: 30 seconds</div>
       <button onclick="startCountdown()">Record Answer</button>
       <button onclick="submitAnswer()">Submit</button>
-      <p id="feedback"></p>
-      <div id="option-buttons">
-        <button class="option-btn" onclick="handleOption('Yes')">Yes</button>
-        <button class="option-btn" onclick="handleOption('No')">No</button>
-        <button class="option-btn" onclick="handleOption('Others')">Others</button>
-      </div>
-    </div>
+     </div>
 
-    <!-- Follow-up Section -->
-    <div id="followup">
-      <h3>Follow-up Question</h3>
-      <div id="video-container">
-        <video id="followup-video" controls autoplay>
-          <source id="followup-source" src="" type="video/mp4" />
-        </video>
-      </div>
-      <div id="timer">Time remaining: 30 seconds</div>
-      <button onclick="startCountdown()">Record Answer</button>
-      <button onclick="submitAnswer()">Submit</button>
-    </div>
+   <!-- DCT 2 Section -->
+<div id="dct2">
+  <h3 id="task-title">DCT 2</h3>
+  <div id="video-container">
+    <video id="dct2-video" controls autoplay onended="checkForOptionsDCT2()">
+      <source id="dct2-source" src="" type="video/mp4" />
+    </video>
+  </div>
+  <div id="timer">Time remaining: 30 seconds</div>
+  <button onclick="startCountdownDCT2()">Record Answer</button>
+  <button onclick="submitAnswerDCT2()">Submit</button>
+</div>
+
+<!-- DCT 3 Section -->
+<div id="dct3">
+  <h3 id="task-title">DCT 3</h3>
+  <div id="video-container">
+    <video id="dct3-video" controls autoplay>
+      <source id="dct3-source" src="" type="video/mp4" />
+    </video>
+  </div>
+  <p>Select an option for follow-up:</p>
+  <button onclick="playFollowUpVideo('yes')">Yes</button>
+  <button onclick="playFollowUpVideo('no')">No</button>
+  <button onclick="playFollowUpVideo('others')">Others</button>
+</div>
+
+<!-- Follow-Up Section for DCT 3 -->
+<div id="followup">
+  <h3>Follow-Up Questions</h3>
+  <video id="followup-video" controls>
+    <source id="followup-source" src="" type="video/mp4" />
+  </video>
+  <p>Answer the follow-up question based on your choice:</p>
+  <button onclick="submitFollowUpAnswer()">Submit</button>
+</div>
 
     <!-- Progress Section -->
     <div id="progress">
-      <h2>Your Progress</h2>
-      <p id="progressData">No attempts yet.</p>
-      <button onclick="downloadProgress()">Download Progress</button>
+    <h2>Progress Summary</h2>
+    <p>You have completed all tasks! Well done.</p>
     </div>
-  </div>
 
   <script>
     let videoIndex = 0;
@@ -433,17 +442,17 @@ function validateConsent() {
     showStatusMessage('✅ Thank you for your consent.');
     document.getElementById('consent-form').style.display = 'none';
     showInstruction(0); // Ensure the instruction video is displayed first
-    console.log('Consent validated. Showing instruction page...'); // Debugging transition
+    console.log('Consent validated. Showing instruction page...');
     return true;
 }
 
 function showInstruction(task) {
     taskIndex = task;
-    document.getElementById('instruction').style.display = 'block'; // Make the instruction section visible
-    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debugging visibility
+    document.getElementById('instruction').style.display = 'block';
+    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debug visibility
     document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
-    document.getElementById('instruction-source').src = instructionVideos[task]; // Set video source
-    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debugging video source
+    document.getElementById('instruction-source').src = instructionVideos[task];
+    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
     const video = document.getElementById('instruction-video');
     video.load();
     video.muted = true; // Required for autoplay
@@ -452,10 +461,10 @@ function showInstruction(task) {
 }
 
 function startTask() {
-    document.getElementById('instruction').style.display = 'none'; // Hide instruction section
-    document.getElementById('test').style.display = 'block'; // Show the test section
-    console.log('Transitioning to test page'); // Debugging transition
-    console.log('Test page displayed.'); // Confirm test page visibility
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction video
+    document.getElementById('test').style.display = 'block'; // Show test section
+    console.log('Transitioning to test page'); // Debug transition
+    console.log('Test page displayed.');
 }
 
     function loadVideo(index) {
@@ -541,11 +550,10 @@ function startTask() {
       resetTimer();
     }
 
-    function showProgress() {
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('progress').style.display = 'block';
-      document.getElementById('progressData').innerText = `You answered ${answers.length} questions. Keep practicing!`;
-    }
+ function showProgress() {
+    document.getElementById('followup').style.display = 'none'; // Hide follow-up section
+    document.getElementById('progress').style.display = 'block'; // Show progress page
+}
 
     function downloadProgress() {
       let progressData = "Your Speaking Test Progress:\n\n";

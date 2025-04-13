@@ -161,7 +161,11 @@
     showInstruction(0); // Ensure this is the only call after consent
     return true;
 }
-
+   function showInstruction() {
+    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    console.log('Instruction page displayed.');
+}
     function startCountdown() {
       const countdownDisplay = document.getElementById('countdown');
       countdownDisplay.style.display = 'block';

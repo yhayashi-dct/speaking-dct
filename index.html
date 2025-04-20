@@ -480,16 +480,15 @@ function showNextButton() {
     const nextButton = document.getElementById('next-button');
     nextButton.style.display = 'inline'; // Show the "Next" button
     console.log('Next button is now visible.');
-    <button id="next-button" onclick="showQuestionVideo()">Next</button>
 }
 
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
 
-function showQuestionVideo(taskIndex, videoSource) {
-    // Update the video source dynamically
+  function showQuestionVideo(taskIndex, videoSource) {
+    // Dynamically update the video source
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    sourceElement.src = `videos/${videos}`; // Assume the video files are in the 'videos' folder
+    sourceElement.src = `videos/${videoSource}`; // Use the passed videoSource parameter
     videoElement.load(); // Reload the video with the updated source
 
     // Play the video and handle events
@@ -497,9 +496,9 @@ function showQuestionVideo(taskIndex, videoSource) {
         .then(() => console.log(`Playing video for Task ${taskIndex}`))
         .catch((error) => console.error('Autoplay failed:', error));
 
+    // Start countdown after the video ends
     videoElement.onended = () => startCountdown(taskIndex);
 }
-
 
     function loadVideo(index) {
       const videoElement = document.getElementById('question-video');

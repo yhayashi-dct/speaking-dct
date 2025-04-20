@@ -355,7 +355,6 @@ function startRecording() {
   <button id="next-button" onclick="startDCT1()">Next</button>
 </div>
 
-
       <!-- DCT 1 Section -->
   <div id="test" style="display: none;">
   <h2>DCT 1</h2>
@@ -446,32 +445,28 @@ function startRecording() {
 function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
     if (!checkbox.checked) {
-        alert('✅ You must agree to the informed consent to proceed.');
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
         return false;
     }
 
-    alert('✅ Thank you for your consent.');
+    showStatusMessage('✅ Thank you for your consent.');
+    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
     showInstruction(); // Proceed to the instruction page
     return true;
 }
 
 function showInstruction() {
-    // Hide the consent form
-    document.getElementById('consent-form').style.display = 'none';
-
-    // Show the instruction section
-    document.getElementById('instruction').style.display = 'block';
-
-    // Load and play the video
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
     videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
     video.load();
 
-    video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
+    // Play the video and prepare the "Next" button
     video.play()
         .then(() => console.log('Instruction video started playing.'))
         .catch((error) => console.error('Autoplay failed:', error));
+    video.onended = showNextButton;
 }
 
 function showNextButton() {

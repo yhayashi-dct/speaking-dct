@@ -163,7 +163,7 @@
 }
    function showInstruction() {
     document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
-    document.getElementById('instructionVideos').style.display = 'block'; // Show the instruction page
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
     console.log('Instruction page displayed.');
 }
     function startCountdown() {
@@ -457,7 +457,7 @@ function validateConsent() {
 
 function showInstruction() {
     document.getElementById('instruction').style.display = 'block'; // Show the instruction page
-    const video = document.getElementById('instructionVideos');
+    const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
     videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
     video.load();

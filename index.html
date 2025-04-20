@@ -347,9 +347,9 @@
 <!-- Instruction Section -->
 <div id="instruction" style="display: none;">
   <h2 id="instruction-title">Instructions</h2>
-  <video id="instruction-video" controls>
-    <source id="instruction-source" src="" type="video/mp4" />
-  </video>
+<video id="instruction-video" controls autoplay>
+  <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
+</video>
   <p>Watch the instruction video carefully before proceeding.</p>
   <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
 </div>
@@ -457,24 +457,30 @@ function validateConsent() {
 }
 
 function showInstruction() {
-    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    // Hide consent form and display instruction section
+    document.getElementById('consent-form').style.display = 'none';
+    const instructionSection = document.getElementById('instruction');
+    instructionSection.style.display = 'block';
 
+    // Set up the video element
     const video = document.getElementById('instruction-video');
-    video.setAttribute('playsinline', ''); // Ensure inline playback on iOS
+    const videoSource = document.getElementById('instruction-source');
 
-    // Attempt to autoplay the video
+    // Confirm video source is set (if dynamically handled)
+    videoSource.src = 'videos/instruction.mp4'; // Replace with your actual video path if needed
+    video.load(); // Ensure video file is loaded
+
+    // Attempt to autoplay the video unmuted
+    video.setAttribute('playsinline', ''); // For inline playback on iOS
     video.play()
         .then(() => console.log('Video started playing unmuted.'))
         .catch((error) => {
-            console.error('Autoplay failed:', error);
-            alert('Please click the video to play unmuted.');
+            console.error('Autoplay failed. Browser may require user interaction:', error);
         });
 
-    // Attach event listener to show the "Next" button when the video ends
+    // Attach event listener for when video ends to show the 'Next' button
     video.onended = showNextButton;
 }
-
 
 function showNextButton() {
     const nextButton = document.getElementById('next-button');

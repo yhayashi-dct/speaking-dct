@@ -230,20 +230,49 @@
       <button onclick="validateConsent()">Next</button>
     </div>
 
-<!-- Instruction Section -->
-<div id="instruction" style="display: none;">
-  <h2>Instructions</h2>
-  <video id="instruction-video" controls autoplay>
-    <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
-  </video>
-  <p>Watch the instructions carefully before proceeding.</p>
-  <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
+<div id="consent-form">
+  <h2>Participant Information</h2>
+  <!-- Participant details -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+    </div>
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <input type="text" id="age" required />
+    </div>
+  </div>
+  <!-- Language and proficiency details -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="language">First Language:</label>
+      <select id="language" required>
+        <option value="">-- Select --</option>
+        <option value="English">English</option>
+        <!-- Add other language options here -->
+      </select>
+      <label for="level">English Proficiency Test:</label>
+      <select id="level">
+        <option value="">-- Select --</option>
+        <option value="TOEIC">TOEIC</option>
+        <!-- Add other test options here -->
+      </select>
+    </div>
+  </div>
+  <!-- Consent statement -->
+  <h2>Informed Consent</h2>
+  <ul>
+    <li>This study is being conducted by...</li>
+    <!-- Add consent points -->
+  </ul>
+  <label>
+    <input type="checkbox" id="consent-checkbox" /> I agree.
+  </label>
+  <!-- "Next" button for validation -->
+  <button onclick="validateConsent()">Next</button>
 </div>
 
-<div id="test" style="display: none;">
-  <h2>DCT 1</h2>
-  <!-- DCT 1 content goes here -->
-</div>
 
       <!-- DCT 1 Section -->
     <div id="test">

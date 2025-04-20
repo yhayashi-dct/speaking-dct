@@ -200,7 +200,7 @@
         }
       }, 1000);
     }
- function validateConsent() {
+function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
     if (!checkbox.checked) {
         showStatusMessage('✅ You must agree to the informed consent to proceed.');
@@ -215,15 +215,19 @@
 
 function showInstruction() {
     document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
-    videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
+    videoSource.src = 'videos/instruction.mp4'; // Correct video file path
     video.load();
 
-    // Play the video and prepare the "Next" button
+    // Attempt autoplay
+    video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
     video.play()
         .then(() => console.log('Instruction video started playing.'))
         .catch((error) => console.error('Autoplay failed:', error));
+
+    // Attach onended event to show Next button
     video.onended = showNextButton;
 }
 

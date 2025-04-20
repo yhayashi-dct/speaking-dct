@@ -232,12 +232,12 @@
 
 <div id="consent-form">
   <h2>Participant Information</h2>
-  <!-- Participant details -->
-  <div class="form-row">
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" id="name" required />
-    </div>
+  <label>
+    <input type="checkbox" id="consent-checkbox" /> I agree.（同意する）
+  </label>
+  <button onclick="validateConsent()">Next</button>
+</div>
+
     <div class="form-group">
       <label for="age">Age:</label>
       <input type="text" id="age" required />

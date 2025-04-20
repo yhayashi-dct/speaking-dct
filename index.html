@@ -359,14 +359,9 @@ function startRecording() {
   <div id="test" style="display: none;">
   <h2>DCT 1</h2>
   <video id="question-video" controls autoplay>
-  <source src="videos/DCT 1 Q1.mp4" type="video/mp4" />
+    <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
   </video>
   <p>Prepare to answer the question...</p>
-  <div id="countdown" style="display: none;">5</div>
- <div id="mic-container" style="display: none;">
-  <div id="mic-icon">
-    <img src="your-image-path/microphone.png" alt="Microphone Icon" style="width: 50px; height: 50px;" />
-  </div>
 </div>
     <div id="volume-bar">
       <div id="volume-level"></div>
@@ -381,7 +376,7 @@ function startRecording() {
   <h3 id="task-title">DCT 2</h3>
   <div id="video-container">
     <video id="dct2-video" controls autoplay onended="checkForOptionsDCT2()">
-      <source id="dct2-source" src="" type="video/mp4" />
+      <source id="dct2-source" src="videos/DCT 2 Q1.mp4" type="video/mp4" />
     </video>
   </div>
   <div id="timer">Time remaining: 30 seconds</div>

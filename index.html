@@ -460,9 +460,10 @@ function showInstruction(task) {
     console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
     const video = document.getElementById('instruction-video');
     video.load();
-    video.muted = true; // Required for autoplay
     video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
     video.play(); // Play the video
+    video.onended = showNextButton; // Attach event listener
+    console.log('Instruction page displayed. Next button will show after video ends.');
 }
 
 function showNextButton() {

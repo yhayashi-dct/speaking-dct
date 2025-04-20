@@ -346,12 +346,17 @@
 
 <!-- Instruction Section -->
 <div id="instruction" style="display: none;">
-  <h2>Instructions</h2>
- <video id="instruction-video" controls autoplay muted playsinline>
-  <source src="videos/DCT1 instructions.mp4" type="video/mp4" />
-</video>
-  <p>Watch the instructions carefully before proceeding.</p>
-  <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
+    <h2 id="instruction-title">Instructions</h2>
+    <video id="instruction-video" controls>
+        <source id="instruction-source" src="" type="video/mp4" />
+    </video>
+    <p>Watch the instruction video carefully before proceeding.</p>
+    <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
+</div>
+
+<!-- DCT 1 Section -->
+<div id="test" style="display: none;">
+    <h2>DCT 1</h2>
 </div>
 
       <!-- DCT 1 Section -->
@@ -453,32 +458,47 @@ function validateConsent() {
 
 function showInstruction(task) {
     taskIndex = task;
-    document.getElementById('instruction').style.display = 'block';
-    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debug visibility
-    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
-    document.getElementById('instruction-source').src = instructionVideos[task];
-    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
+    const instructionSection = document.getElementById('instruction');
+    instructionSection.style.display = 'block'; // Show the instruction section
+    console.log('Instruction section visibility:', instructionSection.style.display);
+
     const video = document.getElementById('instruction-video');
+    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+
+    // Set the video source dynamically
+    const videoSource = document.getElementById('instruction-source');
+    videoSource.src = instructionVideos[task];
+    console.log('Video Source Set To:', videoSource.src);
+
+    // Load the video and ensure inline playback
     video.load();
     video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
-    video.play(); // Play the video
-    video.onended = showNextButton; // Attach event listener
+
+    // Attach the event listener AFTER video is fully set up
+    video.onended = showNextButton;
+
+    // Play the video
+    video.play().then(() => {
+        console.log('Video started playing.');
+    }).catch((error) => {
+        console.error('Autoplay failed:', error);
+    });
+
     console.log('Instruction page displayed. Next button will show after video ends.');
 }
 
 function showNextButton() {
     const nextButton = document.getElementById('next-button');
-    nextButton.style.display = 'inline'; // Show the "Next" button
+    nextButton.style.display = 'inline'; // Make the "Next" button visible
     console.log('Next button is now visible.');
 }
 
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
 
-function startTask() {
-    document.getElementById('instruction').style.display = 'none'; // Hide instruction video
-    document.getElementById('test').style.display = 'block'; // Show test section
-    console.log('Transitioning to test page'); // Debug transition
-    console.log('Test page displayed.');
+function startDCT1() {
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction section
+    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
+    console.log('Transitioned to DCT 1.');
 }
 
     function loadVideo(index) {

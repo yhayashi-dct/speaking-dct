@@ -457,17 +457,9 @@ function validateConsent() {
 }
 
 function showInstruction() {
-    taskIndex = task;
-    document.getElementById('instruction').style.display = 'block';
-    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debug visibility
-    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
-    document.getElementById('instruction-source').src = instructionVideos[task];
-    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
-    const video = document.getElementById('instruction-video');
-    video.load();
-    video.unmuted = true; // Required for autoplay
-    video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
-    video.play(); // Play the video
+    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    console.log('Instruction page displayed.');
     // Attach event listener for when video ends to show the 'Next' button
     video.onended = showNextButton;
    <button onclick="startDCT1()">Next</button>

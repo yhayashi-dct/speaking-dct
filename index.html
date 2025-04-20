@@ -142,32 +142,13 @@
     }
   </style>
   <script>
-   let videoIndex = 0;
-    let taskIndex = 0;
     let countdownInterval;
     let timeLeft = 30;
-    let isFollowup = false;
+    let micStream, audioContext, analyser, dataArray;
 
-    const taskTitles = ["DCT 1", "DCT 2", "DCT 3"];
-    const instructionVideos = [
-      "videos/DCT1 instructions.mp4",
-      "videos/DCT2 instructions.mp4",
-      "videos/DCT_split questions_instructions.mp4"
-    ];
-    const videos = [
-      "videos/DCT 1 Q1.mp4",
-      "videos/DCT 1 Q2.mp4",
-      "videos/DCT 1 Q3.mp4",
-      "videos/DCT2 Q1.mp4",
-      "videos/DCT2 Q2.mp4",
-      "videos/DCT_split questions_Q1.mp4"
-    ];
-    const followupVideos = {
-      Yes: "videos/DCT_split questions Q1_yes.mp4",
-      No: "videos/DCT_split questions Q1_no.mp4",
-      Others: "videos/DCT_split questions Q1_others.mp4"
-    };
-    let answers = [];
+    function showStatusMessage(message) {
+      document.getElementById('status-message').innerText = message;
+    }
 
    function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
@@ -199,66 +180,6 @@
           startRecording();
         }
       }, 1000);
-    }
-function validateConsent() {
-    const checkbox = document.getElementById('consent-checkbox');
-    if (!checkbox.checked) {
-        showStatusMessage('✅ You must agree to the informed consent to proceed.');
-        return false;
-    }
-
-    showStatusMessage('✅ Thank you for your consent.');
-    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
-    showInstruction(); // Proceed to the instruction page
-    return true;
-}
-
-function showInstruction() {
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
-
-    const video = document.getElementById('instruction-video');
-    const videoSource = document.getElementById('instruction-source');
-    videoSource.src = 'videos/instruction.mp4'; // Correct video file path
-    video.load();
-
-    // Attempt autoplay
-    video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
-    video.play()
-        .then(() => console.log('Instruction video started playing.'))
-        .catch((error) => console.error('Autoplay failed:', error));
-
-    // Attach onended event to show Next button
-    video.onended = showNextButton;
-}
-
-function showNextButton() {
-    const nextButton = document.getElementById('next-button');
-    nextButton.style.display = 'inline'; // Show the "Next" button
-    console.log('Next button is now visible.');
-    <button id="next-button" onclick="startDCT1()">Next</button>
-}
-
-document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
-
-function startDCT1() {
-    document.getElementById('instruction').style.display = 'none'; // Hide instruction page
-    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
-    console.log('Transitioned to DCT 1.');
-}
-
-    function loadVideo(index) {
-      const videoElement = document.getElementById('question-video');
-      const videoSource = document.getElementById('video-source');
-      videoSource.src = videos[index];
-      videoElement.load();
-      videoElement.play();
-      resetTimer();
-      document.getElementById('option-buttons').style.display = 'none';
-    }
-
-    function startCountdown() {
-      alert("Recording starts in 5 seconds...");
-      setTimeout(startRecording, 5000);
     }
 
 function startRecording() {
@@ -334,90 +255,6 @@ function startRecording() {
       if (audioContext) {
         audioContext.close();
       }
-    function startTimer() {
-      timeLeft = 30;
-      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
-        if (timeLeft <= 0) {
-          clearInterval(countdownInterval);
-          alert("Time is up!");
-          submitAnswer();
-        }
-      }, 1000);
-    }
-
-    function resetTimer() {
-      clearInterval(countdownInterval);
-      document.getElementById("timer").innerText = "Time remaining: 30 seconds";
-    }
-
-    function submitAnswer() {
-      clearInterval(countdownInterval);
-      alert("Answer submitted.");
-      answers.push("Sample answer " + (videoIndex + 1));
-      if (isFollowup) {
-        document.getElementById('followup').style.display = 'none';
-        isFollowup = false;
-        videoIndex++;
-      } else {
-        videoIndex++;
-      }
-
-      if (videoIndex === 3) {
-        showInstruction(1);
-      } else if (videoIndex === 5) {
-        showInstruction(2);
-      } else if (videoIndex >= videos.length) {
-        showProgress();
-      } else {
-        loadVideo(videoIndex);
-      }
-    }
-
-    function checkForOptions() {
-      const currentVideo = videos[videoIndex];
-      if (currentVideo.includes("DCT_split questions_Q1")) {
-        document.getElementById('option-buttons').style.display = 'block';
-      }
-    }
-
-    function handleOption(option) {
-      alert("You selected: " + option);
-      document.getElementById('option-buttons').style.display = 'none';
-      isFollowup = true;
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('followup').style.display = 'block';
-      const followupVideo = document.getElementById('followup-video');
-      const followupSource = document.getElementById('followup-source');
-      followupSource.src = followupVideos[option];
-      followupVideo.load();
-      followupVideo.play();
-      resetTimer();
-    }
-
- function showProgress() {
-    document.getElementById('followup').style.display = 'none'; // Hide follow-up section
-    document.getElementById('progress').style.display = 'block'; // Show progress page
-}
-
-    function downloadProgress() {
-      let progressData = "Your Speaking Test Progress:\n\n";
-      answers.forEach((answer, index) => {
-        let taskName = index < 3 ? taskTitles[0] : index < 5 ? taskTitles[1] : taskTitles[2];
-        progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
-      });
-
-      const blob = new Blob([progressData], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'progress_report.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
     }
   </script>
 </head>
@@ -577,5 +414,180 @@ function startRecording() {
     <p>You have completed all tasks! Well done.</p>
     </div>
 
- </body>
+  <script>
+    let videoIndex = 0;
+    let taskIndex = 0;
+    let countdownInterval;
+    let timeLeft = 30;
+    let isFollowup = false;
+
+    const taskTitles = ["DCT 1", "DCT 2", "DCT 3"];
+    const instructionVideos = [
+      "videos/DCT1 instructions.mp4",
+      "videos/DCT2 instructions.mp4",
+      "videos/DCT_split questions_instructions.mp4"
+    ];
+    const videos = [
+      "videos/DCT 1 Q1.mp4",
+      "videos/DCT 1 Q2.mp4",
+      "videos/DCT 1 Q3.mp4",
+      "videos/DCT2 Q1.mp4",
+      "videos/DCT2 Q2.mp4",
+      "videos/DCT_split questions_Q1.mp4"
+    ];
+    const followupVideos = {
+      Yes: "videos/DCT_split questions Q1_yes.mp4",
+      No: "videos/DCT_split questions Q1_no.mp4",
+      Others: "videos/DCT_split questions Q1_others.mp4"
+    };
+    let answers = [];
+
+function validateConsent() {
+    const checkbox = document.getElementById('consent-checkbox');
+    if (!checkbox.checked) {
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
+        return false;
+    }
+
+    showStatusMessage('✅ Thank you for your consent.');
+    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
+    showInstruction(); // Proceed to the instruction page
+    return true;
+}
+
+function showInstruction() {
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    const video = document.getElementById('instruction-video');
+    const videoSource = document.getElementById('instruction-source');
+    videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
+    video.load();
+
+    // Play the video and prepare the "Next" button
+    video.play()
+        .then(() => console.log('Instruction video started playing.'))
+        .catch((error) => console.error('Autoplay failed:', error));
+    video.onended = showNextButton;
+}
+
+function showNextButton() {
+    const nextButton = document.getElementById('next-button');
+    nextButton.style.display = 'inline'; // Show the "Next" button
+    console.log('Next button is now visible.');
+    <button id="next-button" onclick="startDCT1()">Next</button>
+}
+
+document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
+
+function startDCT1() {
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction page
+    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
+    console.log('Transitioned to DCT 1.');
+}
+
+    function loadVideo(index) {
+      const videoElement = document.getElementById('question-video');
+      const videoSource = document.getElementById('video-source');
+      videoSource.src = videos[index];
+      videoElement.load();
+      videoElement.play();
+      resetTimer();
+      document.getElementById('option-buttons').style.display = 'none';
+    }
+
+    function startCountdown() {
+      alert("Recording starts in 5 seconds...");
+      setTimeout(startRecording, 5000);
+    }
+
+    function startRecording() {
+      alert("Recording started! Speak now.");
+      startTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 30;
+      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          alert("Time is up!");
+          submitAnswer();
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(countdownInterval);
+      document.getElementById("timer").innerText = "Time remaining: 30 seconds";
+    }
+
+    function submitAnswer() {
+      clearInterval(countdownInterval);
+      alert("Answer submitted.");
+      answers.push("Sample answer " + (videoIndex + 1));
+      if (isFollowup) {
+        document.getElementById('followup').style.display = 'none';
+        isFollowup = false;
+        videoIndex++;
+      } else {
+        videoIndex++;
+      }
+
+      if (videoIndex === 3) {
+        showInstruction(1);
+      } else if (videoIndex === 5) {
+        showInstruction(2);
+      } else if (videoIndex >= videos.length) {
+        showProgress();
+      } else {
+        loadVideo(videoIndex);
+      }
+    }
+
+    function checkForOptions() {
+      const currentVideo = videos[videoIndex];
+      if (currentVideo.includes("DCT_split questions_Q1")) {
+        document.getElementById('option-buttons').style.display = 'block';
+      }
+    }
+
+    function handleOption(option) {
+      alert("You selected: " + option);
+      document.getElementById('option-buttons').style.display = 'none';
+      isFollowup = true;
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('followup').style.display = 'block';
+      const followupVideo = document.getElementById('followup-video');
+      const followupSource = document.getElementById('followup-source');
+      followupSource.src = followupVideos[option];
+      followupVideo.load();
+      followupVideo.play();
+      resetTimer();
+    }
+
+ function showProgress() {
+    document.getElementById('followup').style.display = 'none'; // Hide follow-up section
+    document.getElementById('progress').style.display = 'block'; // Show progress page
+}
+
+    function downloadProgress() {
+      let progressData = "Your Speaking Test Progress:\n\n";
+      answers.forEach((answer, index) => {
+        let taskName = index < 3 ? taskTitles[0] : index < 5 ? taskTitles[1] : taskTitles[2];
+        progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
+      });
+
+      const blob = new Blob([progressData], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'progress_report.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
 </html>

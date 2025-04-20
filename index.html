@@ -141,7 +141,121 @@
       margin-top: 15px;
     }
   </style>
- 
+  <script>
+    let countdownInterval;
+    let timeLeft = 30;
+    let micStream, audioContext, analyser, dataArray;
+
+    function showStatusMessage(message) {
+      document.getElementById('status-message').innerText = message;
+    }
+
+   function validateConsent() {
+    const checkbox = document.getElementById('consent-checkbox');
+    if (!checkbox.checked) {
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
+        return false;
+    }
+    showStatusMessage('✅ Thank you for your consent.');
+    document.getElementById('consent-form').style.display = 'none';
+    showInstruction(0); // Ensure this is the only call after consent
+    return true;
+}
+   function showInstruction() {
+    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    console.log('Instruction page displayed.');
+}
+    function startCountdown() {
+      const countdownDisplay = document.getElementById('countdown');
+      countdownDisplay.style.display = 'block';
+      let seconds = 5;
+      countdownDisplay.innerText = seconds;
+      const interval = setInterval(() => {
+        seconds--;
+        countdownDisplay.innerText = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          countdownDisplay.style.display = 'none';
+          startRecording();
+        }
+      }, 1000);
+    }
+
+    function startRecording() {
+      showStatusMessage("✅ Recording started. Speak now.");
+      document.getElementById('mic-container').style.display = 'block';
+      startVolumeMeter();
+      startTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 30;
+      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          showStatusMessage("✅ Time is up. Submitting your answer...");
+          stopVolumeMeter();
+          submitAnswer();
+        }
+      }, 1000);
+    }
+
+    function submitAnswer() {
+      clearInterval(countdownInterval);
+      showStatusMessage("✅ Answer submitted.");
+      document.getElementById('mic-container').style.display = 'none';
+      document.getElementById('next-button').style.display = 'block';
+    }
+     function showMicAndGauge() {
+      const micContainer = document.getElementById('mic-container');
+      micContainer.style.display = 'block'; // Make the microphone and gauge visible
+      console.log('Microphone and gauge bar are now visible.');
+    }
+     function goToNextTask() {
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('next-button').style.display = 'none';
+      document.getElementById('dct2').style.display = 'block';
+      showStatusMessage('✅ Now starting DCT 2');
+      startCountdown();
+    }
+
+    function startVolumeMeter() {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        micStream = stream;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+        analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        function updateVolume() {
+          analyser.getByteFrequencyData(dataArray);
+          let sum = dataArray.reduce((a, b) => a + b, 0);
+          let average = sum / dataArray.length;
+          let percent = Math.min(100, Math.max(0, average / 2));
+          document.getElementById('volume-level').style.width = percent + '%';
+          requestAnimationFrame(updateVolume);
+        }
+
+        updateVolume();
+      });
+    }
+
+    function stopVolumeMeter() {
+      if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+      }
+      if (audioContext) {
+        audioContext.close();
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -230,49 +344,15 @@
       <button onclick="validateConsent()">Next</button>
     </div>
 
-<div id="consent-form">
-  <h2>Participant Information</h2>
-  <label>
-    <input type="checkbox" id="consent-checkbox" /> I agree.（同意する）
-  </label>
-  <button onclick="validateConsent()">Next</button>
+<!-- Instruction Section -->
+<div id="instruction" style="display: none;">
+  <h2>Instructions</h2>
+ <video id="instruction-video" controls autoplay muted playsinline>
+  <source src="videos/DCT1 instructions.mp4" type="video/mp4" />
+</video>
+  <p>Watch the instructions carefully before proceeding.</p>
+  <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
 </div>
-
-    <div class="form-group">
-      <label for="age">Age:</label>
-      <input type="text" id="age" required />
-    </div>
-  </div>
-  <!-- Language and proficiency details -->
-  <div class="form-row">
-    <div class="form-group">
-      <label for="language">First Language:</label>
-      <select id="language" required>
-        <option value="">-- Select --</option>
-        <option value="English">English</option>
-        <!-- Add other language options here -->
-      </select>
-      <label for="level">English Proficiency Test:</label>
-      <select id="level">
-        <option value="">-- Select --</option>
-        <option value="TOEIC">TOEIC</option>
-        <!-- Add other test options here -->
-      </select>
-    </div>
-  </div>
-  <!-- Consent statement -->
-  <h2>Informed Consent</h2>
-  <ul>
-    <li>This study is being conducted by...</li>
-    <!-- Add consent points -->
-  </ul>
-  <label>
-    <input type="checkbox" id="consent-checkbox" /> I agree.
-  </label>
-  <!-- "Next" button for validation -->
-  <button onclick="validateConsent()">Next</button>
-</div>
-
 
       <!-- DCT 1 Section -->
     <div id="test">
@@ -361,67 +441,43 @@
 function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
     if (!checkbox.checked) {
-        alert('✅ You must agree to the informed consent to proceed.');
+        showStatusMessage('✅ You must agree to the informed consent to proceed.');
         return false;
     }
-
-    alert('✅ Thank you for your consent.');
-    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
-    showInstruction(); // Transition to instruction page
+    showStatusMessage('✅ Thank you for your consent.');
+    document.getElementById('consent-form').style.display = 'none';
+    showInstruction(0); // Ensure the instruction video is displayed first
+    console.log('Consent validated. Showing instruction page...');
     return true;
-  <button onclick="validateConsent()">Next</button>
 }
 
-function showInstruction() {
-    // Display the instruction page
-    document.getElementById('instruction').style.display = 'block'; // Show instruction section
-
+function showInstruction(task) {
+    taskIndex = task;
+    document.getElementById('instruction').style.display = 'block';
+    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debug visibility
+    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+    document.getElementById('instruction-source').src = instructionVideos[task];
+    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
     const video = document.getElementById('instruction-video');
-    const videoSource = document.getElementById('instruction-source');
-
-    // Ensure the video source is properly set
-    videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
-    video.load(); // Load the video file
-
-    // Attempt to autoplay the video unmuted
-    video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
-    video.play()
-        .then(() => console.log('Instruction video started playing unmuted.'))
-        .catch((error) => {
-            console.error('Autoplay failed:', error);
-        });
-
-    // Reveal the "Next" button after the video ends
-    video.onended = showNextButton;
-}
-
-    // Set and play video
-    const video = document.getElementById('instruction-video');
-    const videoSource = document.getElementById('instruction-source');
-    videoSource.src = instructionVideos[task]; // Set appropriate video source
-    video.load(); // Ensure video loads properly
-
+    video.load();
+    video.muted = true; // Required for autoplay
     video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
-    video.play()
-        .then(() => console.log('Instruction video started playing.'))
-        .catch((error) => console.error('Autoplay failed:', error));
-
-    // Reveal "Next" button when the video ends
-    video.onended = showNextButton;
+    video.play(); // Play the video
 }
 
 function showNextButton() {
     const nextButton = document.getElementById('next-button');
-    if (nextButton) {
-        nextButton.style.display = 'inline'; // Reveal the Next button
-        console.log('Next button is now visible.');
-    }
+    nextButton.style.display = 'inline'; // Show the "Next" button
+    console.log('Next button is now visible.');
 }
 
-function startDCT1() {
-    document.getElementById('instruction').style.display = 'none'; // Hide instruction section
-    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
-    console.log('Transitioned to DCT 1.');
+document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
+
+function startTask() {
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction video
+    document.getElementById('test').style.display = 'block'; // Show test section
+    console.log('Transitioning to test page'); // Debug transition
+    console.log('Test page displayed.');
 }
 
     function loadVideo(index) {
@@ -439,11 +495,8 @@ function startDCT1() {
       setTimeout(startRecording, 5000);
     }
 
-   
     function startRecording() {
-      showStatusMessage("✅ Recording started. Speak now.");
-      document.getElementById('mic-container').style.display = 'block';
-      startVolumeMeter();
+      alert("Recording started! Speak now.");
       startTimer();
     }
 
@@ -455,8 +508,7 @@ function startDCT1() {
         document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
         if (timeLeft <= 0) {
           clearInterval(countdownInterval);
-          showStatusMessage("✅ Time is up. Submitting your answer...");
-          stopVolumeMeter();
+          alert("Time is up!");
           submitAnswer();
         }
       }, 1000);
@@ -510,51 +562,7 @@ function startDCT1() {
       followupVideo.play();
       resetTimer();
     }
- function showMicAndGauge() {
-      const micContainer = document.getElementById('mic-container');
-      micContainer.style.display = 'block'; // Make the microphone and gauge visible
-      console.log('Microphone and gauge bar are now visible.');
-    }
-     function goToNextTask() {
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('next-button').style.display = 'none';
-      document.getElementById('dct2').style.display = 'block';
-      showStatusMessage('✅ Now starting DCT 2');
-      startCountdown();
-    }
 
-    function startVolumeMeter() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaStreamSource(stream);
-        analyser = audioContext.createAnalyser();
-        source.connect(analyser);
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-
-        function updateVolume() {
-          analyser.getByteFrequencyData(dataArray);
-          let sum = dataArray.reduce((a, b) => a + b, 0);
-          let average = sum / dataArray.length;
-          let percent = Math.min(100, Math.max(0, average / 2));
-          document.getElementById('volume-level').style.width = percent + '%';
-          requestAnimationFrame(updateVolume);
-        }
-
-        updateVolume();
-      });
-    }
-
-    function stopVolumeMeter() {
-      if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-      }
-      if (audioContext) {
-        audioContext.close();
-      }
-    }
  function showProgress() {
     document.getElementById('followup').style.display = 'none'; // Hide follow-up section
     document.getElementById('progress').style.display = 'block'; // Show progress page

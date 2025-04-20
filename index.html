@@ -161,11 +161,7 @@
     showInstruction(0); // Ensure this is the only call after consent
     return true;
 }
-   function showInstruction() {
-    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
-    console.log('Instruction page displayed.');
-}
+
     function startCountdown() {
       const countdownDisplay = document.getElementById('countdown');
       countdownDisplay.style.display = 'block';
@@ -470,10 +466,9 @@ function showInstruction() {
 }
 
 function showNextButton() {
-    const nextButton = document.getElementById('next-button');
-    nextButton.style.display = 'inline'; // Show the "Next" button
-    console.log('Next button is now visible.');
-    <button id="next-button" onclick="startDCT1()">Next</button>
+  const nextButton = document.getElementById('next-button');
+  nextButton.style.display = 'inline';  
+  console.log('Next button is now visible.');
 }
 
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends

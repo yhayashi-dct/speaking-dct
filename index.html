@@ -183,38 +183,39 @@ function validateConsent() {
 }
 
 function showInstruction() {
-    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    // Hide consent form and show instruction page
+    document.getElementById('consent-form').style.display = 'none';
+    const instructionSection = document.getElementById('instruction');
+    instructionSection.style.display = 'block';
 
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
-
-    // Ensure video source is set correctly
-    videoSource.src = 'videos/instruction.mp4'; // Correct file path for the instruction video
-    video.load(); // Load the video file
-    video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
+    
+    // Ensure the video source is correct
+    videoSource.src = 'videos/instruction.mp4'; // Replace with actual file path
+    video.load(); // Load video file
 
     // Attempt autoplay
+    video.setAttribute('playsinline', ''); // Ensure inline playback on iOS
     video.play()
         .then(() => console.log('Instruction video started playing unmuted.'))
         .catch((error) => {
             console.error('Autoplay failed:', error);
         });
 
-    // Ensure the "Next" button appears after the video ends
+    // Attach onended event to display the "Next" button
     video.onended = showNextButton;
-    <button onclick="startDCT1()">Next</button
 }
 
 function showNextButton() {
     const nextButton = document.getElementById('next-button');
-    nextButton.style.display = 'inline'; // Reveal the Next button
+    nextButton.style.display = 'inline'; // Make "Next" button visible
     console.log('Next button is now visible.');
 }
 
 function startDCT1() {
     document.getElementById('instruction').style.display = 'none'; // Hide instruction page
-    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
+    document.getElementById('test').style.display = 'block'; // Show DCT 1
     console.log('Transitioned to DCT 1.');
 }
 
@@ -451,8 +452,11 @@ function startDCT1() {
     <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
   </video>
   <p>Watch the instruction video carefully before proceeding.</p>
-  <!-- Next button to transition to DCT 1 -->
   <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
+</div>
+
+<div id="test" style="display: none;">
+  <h2>DCT 1</h2>
 </div>
 
 <!-- DCT 1 Section -->

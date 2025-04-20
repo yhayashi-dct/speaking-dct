@@ -346,15 +346,15 @@ function startRecording() {
     </div>
 
 <!-- Instruction Section -->
-<div id="instruction" style="display: block;">
+<div id="instruction" style="display: none;">
   <h2>Instructions</h2>
   <video id="instruction-video" controls autoplay>
-  <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
-</video>
-
+    <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
+  </video>
   <p>Watch the instructions carefully before proceeding.</p>
   <button id="next-button" onclick="startDCT1()">Next</button>
 </div>
+
 
       <!-- DCT 1 Section -->
   <div id="test" style="display: none;">
@@ -446,34 +446,32 @@ function startRecording() {
 function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
     if (!checkbox.checked) {
-        showStatusMessage('✅ You must agree to the informed consent to proceed.');
+        alert('✅ You must agree to the informed consent to proceed.');
         return false;
     }
-    showStatusMessage('✅ Thank you for your consent.');
-    document.getElementById('consent-form').style.display = 'none';
-    showInstruction(0); // Ensure the instruction video is displayed first
-    console.log('Consent validated. Showing instruction page...');
+
+    alert('✅ Thank you for your consent.');
+    showInstruction(); // Proceed to the instruction page
     return true;
 }
 
 function showInstruction() {
-    // Show the instruction page
-    const instructionSection = document.getElementById('instruction');
-    instructionSection.style.display = 'block';
+    // Hide the consent form
+    document.getElementById('consent-form').style.display = 'none';
 
+    // Show the instruction section
+    document.getElementById('instruction').style.display = 'block';
+
+    // Load and play the video
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
-    videoSource.src = 'videos/instruction.mp4'; // Correct file path
-    video.load(); // Load the video file
+    videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
+    video.load();
 
-    // Attempt to autoplay the video
     video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
     video.play()
         .then(() => console.log('Instruction video started playing.'))
         .catch((error) => console.error('Autoplay failed:', error));
-
-    // Show Next button after video ends
-    video.onended = showNextButton;
 }
 
 function showNextButton() {

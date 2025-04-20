@@ -345,13 +345,13 @@
     </div>
 
 <!-- Instruction Section -->
-<div id="instruction" style="display: none;">
+<div id="instruction" style="display: block;">
   <h2>Instructions</h2>
- <video id="instruction-video" controls autoplay muted playsinline>
-  <source src="videos/DCT1 instructions.mp4" type="video/mp4" />
-</video>
+  <video id="instruction-video" controls autoplay>
+    <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
+  </video>
   <p>Watch the instructions carefully before proceeding.</p>
-  <button onclick="startDCT1()">Next</button>
+  <button id="next-button" onclick="startDCT1()">Next</button>
 </div>
 
       <!-- DCT 1 Section -->
@@ -474,12 +474,12 @@ function showNextButton() {
 
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
 
-function startTask() {
-    document.getElementById('instruction').style.display = 'none'; // Hide instruction video
-    document.getElementById('test').style.display = 'block'; // Show test section
-    console.log('Transitioning to test page'); // Debug transition
-    console.log('Test page displayed.');
+function startDCT1() {
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction page
+    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
+    console.log('Transitioned to DCT 1.');
 }
+
 
     function loadVideo(index) {
       const videoElement = document.getElementById('question-video');

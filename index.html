@@ -352,7 +352,7 @@ function startRecording() {
     <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
   </video>
   <p>Watch the instructions carefully before proceeding.</p>
-  <button id="next-button" onclick="showQuestionVideo(1, 'DCT 1 Q1.mp4')">Next</button>
+  <button id="next-button" onclick="showQuestionVideo(1, 'videos/DCT 1 Q1.mp4')">Next</button>
 </div>
 
       <!-- DCT 1 Section -->
@@ -488,8 +488,8 @@ document.getElementById('instruction-video').onended = showNextButton; // Call w
     // Dynamically update the video source
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    sourceElement.src = `videos/${videoSource}`; // Use the passed videoSource parameter
-    videoElement.load(); // Reload the video with the updated source
+    videoSource.src = 'videos/DCT 1 Q1.mp4'; // Set the correct video file path
+    video.load();
 
     // Play the video and handle events
     videoElement.play()

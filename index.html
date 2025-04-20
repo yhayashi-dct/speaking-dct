@@ -351,7 +351,7 @@
   <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
 </video>
   <p>Watch the instruction video carefully before proceeding.</p>
-  <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
+  <button onclick="startDCT1()">Next</button>
 </div>
 
 <!-- DCT 1 Section -->
@@ -457,29 +457,20 @@ function validateConsent() {
 }
 
 function showInstruction() {
-    // Hide consent form and display instruction section
-    document.getElementById('consent-form').style.display = 'none';
-    const instructionSection = document.getElementById('instruction');
-    instructionSection.style.display = 'block';
-
-    // Set up the video element
+    taskIndex = task;
+    document.getElementById('instruction').style.display = 'block';
+    console.log('Instruction section visibility:', document.getElementById('instruction').style.display); // Debug visibility
+    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+    document.getElementById('instruction-source').src = instructionVideos[task];
+    console.log('Video Source Set To:', document.getElementById('instruction-source').src); // Debug video source
     const video = document.getElementById('instruction-video');
-    const videoSource = document.getElementById('instruction-source');
-
-    // Confirm video source is set (if dynamically handled)
-    videoSource.src = 'videos/instruction.mp4'; // Replace with your actual video path if needed
-    video.load(); // Ensure video file is loaded
-
-    // Attempt to autoplay the video unmuted
-    video.setAttribute('playsinline', ''); // For inline playback on iOS
-    video.play()
-        .then(() => console.log('Video started playing unmuted.'))
-        .catch((error) => {
-            console.error('Autoplay failed. Browser may require user interaction:', error);
-        });
-
+    video.load();
+    video.unmuted = true; // Required for autoplay
+    video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
+    video.play(); // Play the video
     // Attach event listener for when video ends to show the 'Next' button
     video.onended = showNextButton;
+   <button onclick="startDCT1()">Next</button>
 }
 
 function showNextButton() {

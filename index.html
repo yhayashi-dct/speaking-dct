@@ -480,7 +480,7 @@ function showNextButton() {
     const nextButton = document.getElementById('next-button');
     nextButton.style.display = 'inline'; // Show the "Next" button
     console.log('Next button is now visible.');
-    <button id="next-button" onclick="startDCT1()">Next</button>
+    <button id="next-button" onclick="showQuestionVideo()">Next</button>
 }
 
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
@@ -489,7 +489,7 @@ function showQuestionVideo(taskIndex, videoSource) {
     // Update the video source dynamically
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    sourceElement.src = `videos/${videoSource}`; // Assume the video files are in the 'videos' folder
+    sourceElement.src = `videos/${videos}`; // Assume the video files are in the 'videos' folder
     videoElement.load(); // Reload the video with the updated source
 
     // Play the video and handle events
@@ -499,8 +499,6 @@ function showQuestionVideo(taskIndex, videoSource) {
 
     videoElement.onended = () => startCountdown(taskIndex);
 }
-
-
 
 
     function loadVideo(index) {

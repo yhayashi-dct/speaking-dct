@@ -456,36 +456,25 @@ function validateConsent() {
     return true;
 }
 
-function showInstruction(task) {
-    taskIndex = task;
-    const instructionSection = document.getElementById('instruction');
-    instructionSection.style.display = 'block'; // Show the instruction section
-    console.log('Instruction section visibility:', instructionSection.style.display);
+function showInstruction() {
+    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
 
     const video = document.getElementById('instruction-video');
-    document.getElementById('instruction-title').innerText = `Task ${task + 1} Instructions`;
+    video.setAttribute('playsinline', ''); // Ensure inline playback on iOS
 
-    // Set the video source dynamically
-    const videoSource = document.getElementById('instruction-source');
-    videoSource.src = instructionVideos[task];
-    console.log('Video Source Set To:', videoSource.src);
+    // Attempt to autoplay the video
+    video.play()
+        .then(() => console.log('Video started playing unmuted.'))
+        .catch((error) => {
+            console.error('Autoplay failed:', error);
+            alert('Please click the video to play unmuted.');
+        });
 
-    // Load the video and ensure inline playback
-    video.load();
-    video.setAttribute('playsinline', ''); // Avoid fullscreen on iOS
-
-    // Attach the event listener AFTER video is fully set up
+    // Attach event listener to show the "Next" button when the video ends
     video.onended = showNextButton;
-
-    // Play the video
-    video.play().then(() => {
-        console.log('Video started playing.');
-    }).catch((error) => {
-        console.error('Autoplay failed:', error);
-    });
-
-    console.log('Instruction page displayed. Next button will show after video ends.');
 }
+
 
 function showNextButton() {
     const nextButton = document.getElementById('next-button');

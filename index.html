@@ -169,46 +169,52 @@
     };
     let answers = [];
 
-   function validateConsent() {
+function validateConsent() {
     const checkbox = document.getElementById('consent-checkbox');
     if (!checkbox.checked) {
         showStatusMessage('✅ You must agree to the informed consent to proceed.');
         return false;
     }
     showStatusMessage('✅ Thank you for your consent.');
-    document.getElementById('consent-form').style.display = 'none';
-    showInstruction(0); // Ensure this is the only call after consent
+    document.getElementById('consent-form').style.display = 'none'; // Hide consent form
+    showInstruction(); // Proceed to instruction page
     return true;
+  <button onclick="validateConsent()">Next</button>
 }
- function showInstruction() {
-    document.getElementById('consent-form').style.display = 'none';
-    document.getElementById('instruction').style.display = 'block';
+
+function showInstruction() {
+    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
 
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
-    videoSource.src = 'videos/instruction.mp4'; // Ensure correct file path
-    video.load(); // Load the video
+
+    // Ensure video source is set correctly
+    videoSource.src = 'videos/instruction.mp4'; // Correct file path for the instruction video
+    video.load(); // Load the video file
     video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
 
+    // Attempt autoplay
     video.play()
-        .then(() => console.log('Video started playing unmuted.'))
+        .then(() => console.log('Instruction video started playing unmuted.'))
         .catch((error) => {
             console.error('Autoplay failed:', error);
         });
 
-    video.onended = showNextButton; // Attach event listener for 'Next' button
+    // Ensure the "Next" button appears after the video ends
+    video.onended = showNextButton;
     <button onclick="startDCT1()">Next</button
 }
 
 function showNextButton() {
     const nextButton = document.getElementById('next-button');
-    nextButton.style.display = 'inline';
+    nextButton.style.display = 'inline'; // Reveal the Next button
     console.log('Next button is now visible.');
 }
 
 function startDCT1() {
-    document.getElementById('instruction').style.display = 'none';
-    document.getElementById('test').style.display = 'block';
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction page
+    document.getElementById('test').style.display = 'block'; // Show DCT 1 section
     console.log('Transitioned to DCT 1.');
 }
 
@@ -440,12 +446,13 @@ function startDCT1() {
 
 <!-- Instruction Section -->
 <div id="instruction" style="display: none;">
-  <h2 id="instruction-title">Instructions</h2>
-<video id="instruction-video" controls autoplay>
-  <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
-</video>
+  <h2>Instructions</h2>
+  <video id="instruction-video" controls autoplay>
+    <source id="instruction-source" src="videos/instruction.mp4" type="video/mp4" />
+  </video>
   <p>Watch the instruction video carefully before proceeding.</p>
-  <button onclick="startDCT1()">Next</button>
+  <!-- Next button to transition to DCT 1 -->
+  <button id="next-button" style="display: none;" onclick="startDCT1()">Next</button>
 </div>
 
 <!-- DCT 1 Section -->

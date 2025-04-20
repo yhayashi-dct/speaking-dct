@@ -340,25 +340,16 @@ function validateConsent() {
 }
 
 function showInstruction() {
-    // Hide consent form
-    document.getElementById('consent-form').style.display = 'none';
-
-    // Show instruction page
-    document.getElementById('instruction').style.display = 'block';
-
-    // Set and play video
+    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
-    videoSource.src = 'videos/instruction.mp4'; // Ensure the file path is correct
+    videoSource.src = 'videos/instruction.mp4'; // Set the correct video file path
     video.load();
 
-    // Attempt autoplay
-    video.setAttribute('playsinline', ''); // Prevent fullscreen on iOS
+    // Play the video and prepare the "Next" button
     video.play()
         .then(() => console.log('Instruction video started playing.'))
         .catch((error) => console.error('Autoplay failed:', error));
-
-    // Show "Next" button after video ends
     video.onended = showNextButton;
 }
 
@@ -372,7 +363,7 @@ function showNextButton() {
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
 
 function startDCT1() {
-    document.getElementById('instruction').style.display = 'none'; // Hide instruction section
+    document.getElementById('instruction').style.display = 'none'; // Hide instruction page
     document.getElementById('test').style.display = 'block'; // Show DCT 1 section
     console.log('Transitioned to DCT 1.');
 }

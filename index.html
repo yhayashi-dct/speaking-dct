@@ -141,123 +141,7 @@
       margin-top: 15px;
     }
   </style>
-  <script>
-    let countdownInterval;
-    let timeLeft = 30;
-    let micStream, audioContext, analyser, dataArray;
-
-    function showStatusMessage(message) {
-      document.getElementById('status-message').innerText = message;
-    }
-
-   function validateConsent() {
-    const checkbox = document.getElementById('consent-checkbox');
-    if (!checkbox.checked) {
-        showStatusMessage('✅ You must agree to the informed consent to proceed.');
-        return false;
-    }
-    showStatusMessage('✅ Thank you for your consent.');
-    document.getElementById('consent-form').style.display = 'none';
-    showInstruction(0); // Ensure this is the only call after consent
-    return true;
-}
-   function showInstruction() {
-    document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
-    console.log('Instruction page displayed.');
-}
-    function startCountdown() {
-      const countdownDisplay = document.getElementById('countdown');
-      countdownDisplay.style.display = 'block';
-      let seconds = 5;
-      countdownDisplay.innerText = seconds;
-      const interval = setInterval(() => {
-        seconds--;
-        countdownDisplay.innerText = seconds;
-        if (seconds <= 0) {
-          clearInterval(interval);
-          countdownDisplay.style.display = 'none';
-          startRecording();
-        }
-      }, 1000);
-    }
-
-function startRecording() {
-    showStatusMessage("✅ Recording started. Speak now.");
-    const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // Show microphone and volume gauge
-    startVolumeMeter(); // Start real-time volume monitoring
-    startTimer(); // Begin recording timer
-}
-
-    function startTimer() {
-      timeLeft = 30;
-      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
-        if (timeLeft <= 0) {
-          clearInterval(countdownInterval);
-          showStatusMessage("✅ Time is up. Submitting your answer...");
-          stopVolumeMeter();
-          submitAnswer();
-        }
-      }, 1000);
-    }
-
-    function submitAnswer() {
-      clearInterval(countdownInterval);
-      showStatusMessage("✅ Answer submitted.");
-      document.getElementById('mic-container').style.display = 'none';
-      document.getElementById('next-button').style.display = 'block';
-    }
-     function showMicAndGauge() {
-      const micContainer = document.getElementById('mic-container');
-      micContainer.style.display = 'block'; // Make the microphone and gauge visible
-      console.log('Microphone and gauge bar are now visible.');
-    }
-     function goToNextTask() {
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('next-button').style.display = 'none';
-      document.getElementById('dct2').style.display = 'block';
-      showStatusMessage('✅ Now starting DCT 2');
-      startCountdown();
-    }
-
-    function startVolumeMeter() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaStreamSource(stream);
-        analyser = audioContext.createAnalyser();
-        source.connect(analyser);
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-
-        function updateVolume() {
-          analyser.getByteFrequencyData(dataArray);
-          let sum = dataArray.reduce((a, b) => a + b, 0);
-          let average = sum / dataArray.length;
-          let percent = Math.min(100, Math.max(0, average / 2));
-          document.getElementById('volume-level').style.width = percent + '%';
-          requestAnimationFrame(updateVolume);
-        }
-
-        updateVolume();
-      });
-    }
-
-    function stopVolumeMeter() {
-      if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-      }
-      if (audioContext) {
-        audioContext.close();
-      }
-    }
-  </script>
-</head>
+ </head>
 <body>
   <div class="container">
     <h1>Welcome!</h1>
@@ -495,14 +379,28 @@ function startDCT1() {
     }
 
     function startCountdown() {
-      alert("Recording starts in 5 seconds...");
-      setTimeout(startRecording, 5000);
+      const countdownDisplay = document.getElementById('countdown');
+      countdownDisplay.style.display = 'block';
+      let seconds = 5;
+      countdownDisplay.innerText = seconds;
+      const interval = setInterval(() => {
+        seconds--;
+        countdownDisplay.innerText = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          countdownDisplay.style.display = 'none';
+          startRecording();
+        }
+      }, 1000);
     }
 
-    function startRecording() {
-      alert("Recording started! Speak now.");
-      startTimer();
-    }
+function startRecording() {
+    showStatusMessage("✅ Recording started. Speak now.");
+    const micContainer = document.getElementById('mic-container');
+    micContainer.style.display = 'block'; // Show microphone and volume gauge
+    startVolumeMeter(); // Start real-time volume monitoring
+    startTimer(); // Begin recording timer
+}
 
     function startTimer() {
       timeLeft = 30;
@@ -512,18 +410,65 @@ function startDCT1() {
         document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
         if (timeLeft <= 0) {
           clearInterval(countdownInterval);
-          alert("Time is up!");
+          showStatusMessage("✅ Time is up. Submitting your answer...");
+          stopVolumeMeter();
           submitAnswer();
         }
       }, 1000);
     }
 
-    function resetTimer() {
+    function submitAnswer() {
       clearInterval(countdownInterval);
-      document.getElementById("timer").innerText = "Time remaining: 30 seconds";
+      showStatusMessage("✅ Answer submitted.");
+      document.getElementById('mic-container').style.display = 'none';
+      document.getElementById('next-button').style.display = 'block';
+    }
+     function showMicAndGauge() {
+      const micContainer = document.getElementById('mic-container');
+      micContainer.style.display = 'block'; // Make the microphone and gauge visible
+      console.log('Microphone and gauge bar are now visible.');
+    }
+     function goToNextTask() {
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('next-button').style.display = 'none';
+      document.getElementById('dct2').style.display = 'block';
+      showStatusMessage('✅ Now starting DCT 2');
+      startCountdown();
     }
 
-    function submitAnswer() {
+    function startVolumeMeter() {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        micStream = stream;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+        analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        function updateVolume() {
+          analyser.getByteFrequencyData(dataArray);
+          let sum = dataArray.reduce((a, b) => a + b, 0);
+          let average = sum / dataArray.length;
+          let percent = Math.min(100, Math.max(0, average / 2));
+          document.getElementById('volume-level').style.width = percent + '%';
+          requestAnimationFrame(updateVolume);
+        }
+
+        updateVolume();
+      });
+    }
+
+    function stopVolumeMeter() {
+      if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+      }
+      if (audioContext) {
+        audioContext.close();
+      }
+    }
+      function submitAnswer() {
       clearInterval(countdownInterval);
       alert("Answer submitted.");
       answers.push("Sample answer " + (videoIndex + 1));

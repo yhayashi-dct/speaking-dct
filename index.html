@@ -352,14 +352,14 @@ function startRecording() {
     <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
   </video>
   <p>Watch the instructions carefully before proceeding.</p>
-  <button id="next-button" onclick="showQuestionVideo(1, 'videos/DCT 1 Q1.mp4')">Next</button>
+  <button id="next-button" onclick="showQuestionVideo(1, 'DCT 1 Q1.mp4')">Next</button>
 </div>
 
       <!-- DCT 1 Section -->
   <div id="test" style="display: none;">
   <h2>DCT 1</h2>
   <video id="question-video" controls autoplay>
-    <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
+    <source id="question-source" src="" type="video/mp4" />
   </video>
   <p>Prepare to answer the question...</p>
 </div>
@@ -480,18 +480,15 @@ function showNextButton() {
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
 
   function showQuestionVideo(taskIndex, videoSource) {
-    // Dynamically update the video source
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    videoSource.src = 'videos/DCT 1 Q1.mp4'; // Set the correct video file path
-    video.load();
+    sourceElement.src = `videos/DCT 1 Q1.mp4`; // Match the exact file name
+    videoElement.load();
 
-    // Play the video and handle events
     videoElement.play()
-        .then(() => console.log(`Playing video for Task ${taskIndex}`))
+        .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
 
-    // Start countdown after the video ends
     videoElement.onended = () => startCountdown(taskIndex);
 }
 

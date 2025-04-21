@@ -477,35 +477,41 @@ document.getElementById('instruction-video').onended = showNextButton; // Call w
 
 function showQuestionVideo(taskIndex, videoSource) {
     // Hide the instruction page
-    document.getElementById('instruction').style.display = 'none';
+    const instructionSection = document.getElementById('instruction');
+    if (instructionSection) {
+        instructionSection.style.display = 'none';
+    } else {
+        console.error('Instruction section not found.');
+    }
 
     // Show the DCT 1 section
-    const dctSection = document.getElementById('test');
-    dctSection.style.display = 'block';
+    const testSection = document.getElementById('test');
+    if (testSection) {
+        testSection.style.display = 'block';
+    } else {
+        console.error('Test section not found.');
+    }
 
     // Dynamically update the video source
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    videoSource.src = 'videos/DCT 1 Q1.mp4'; // Set the correct video file path
-    video.load();
+    sourceElement.src = `videos/DCT 1 Q1.mp4'`;
+    videoElement.load();
+ }
 
     // Play the video
     videoElement.play()
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
-
     // Trigger countdown when video ends
     videoElement.onended = () => startCountdown(taskIndex);
-}
+   }
 
     function loadVideo(index) {
       const videoElement = document.getElementById('question-video');
       const videoSource = document.getElementById('video-source');
-      videoSource.src = videos[index];
-      videoElement.load();
-      videoElement.play();
-      resetTimer();
-      document.getElementById('option-buttons').style.display = 'none';
+      videoSource.src = 'videos/DCT 1 Q1.mp4'; // Set the correct video file path
+      video.load();
     }
 
     function startCountdown() {

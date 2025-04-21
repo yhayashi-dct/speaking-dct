@@ -352,7 +352,7 @@ function startRecording() {
     <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
   </video>
   <p>Watch the instructions carefully before proceeding.</p>
-  <button id="next-button" onclick="showQuestionVideo(1, 'DCT 1 Q1.mp4')">Next</button>
+  <button id="next-button" onclick="showQuestionVideo(1, 'DCT 1 Q1.mp4');">Next</button>
 </div>
 
       <!-- DCT 1 Section -->
@@ -376,7 +376,7 @@ function startRecording() {
   <h3 id="task-title">DCT 2</h3>
   <div id="video-container">
     <video id="dct2-video" controls autoplay onended="checkForOptionsDCT2()">
-      <source id="dct2-source" src="videos/DCT 2 Q1.mp4" type="video/mp4" />
+      <source id="dct2-source" src="" type="video/mp4" />
     </video>
   </div>
   <div id="timer">Time remaining: 30 seconds</div>
@@ -453,7 +453,7 @@ function validateConsent() {
     document.getElementById('consent-form').style.display = 'none'; // Hide consent form
 
     // Start DCT 1
-    showQuestionVideo(1, 'videos/DCT 1 Q1'); // Start Task 1 with the first question video
+    showQuestionVideo(1, 'DCT 1 Q1.mp4'); // Start Task 1 with the first question video
     return true;
 }
 
@@ -479,16 +479,26 @@ function showNextButton() {
 
 document.getElementById('instruction-video').onended = showNextButton; // Call when the video ends
 
-  function showQuestionVideo(taskIndex, videoSource) {
+function showQuestionVideo(taskIndex, videoSource) {
+    // Hide the instruction page
+    document.getElementById('instruction').style.display = 'none';
+
+    // Show the DCT 1 section
+    const dctSection = document.getElementById('test'); // Ensure this ID matches your HTML
+    dctSection.style.display = 'block';
+
+    // Update the video source dynamically
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    sourceElement.src = `videos/DCT 1 Q1.mp4`; // Match the exact file name
+    sourceElement.src = `videos/DCT 1 Q1.mp4`; // Correct file path
     videoElement.load();
 
+    // Play the video
     videoElement.play()
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
 
+    // Trigger countdown when the video ends
     videoElement.onended = () => startCountdown(taskIndex);
 }
 

@@ -359,7 +359,7 @@ function startRecording() {
   <div id="test" style="display: none;">
   <h2>DCT 1</h2>
   <video id="question-video" controls autoplay>
-    <source id="question-source" src="" type="video/mp4" />
+  <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
   </video>
   <p>Prepare to answer the question...</p>
 </div>
@@ -451,10 +451,6 @@ function validateConsent() {
 
     showStatusMessage('✅ Thank you for your consent.');
     document.getElementById('consent-form').style.display = 'none'; // Hide consent form
-
-    // Start DCT 1
-    showQuestionVideo(1, 'DCT 1 Q1.mp4'); // Start Task 1 with the first question video
-    return true;
 }
 
 function showInstruction() {

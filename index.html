@@ -484,21 +484,21 @@ function showQuestionVideo(taskIndex, videoSource) {
     document.getElementById('instruction').style.display = 'none';
 
     // Show the DCT 1 section
-    const dctSection = document.getElementById('test'); // Ensure this ID matches your HTML
+    const dctSection = document.getElementById('test');
     dctSection.style.display = 'block';
 
-    // Update the video source dynamically
+    // Dynamically update the video source
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    sourceElement.src = `videos/DCT 1 Q1.mp4`; // Correct file path
-    videoElement.load();
+    videoSource.src = 'videos/DCT 1 Q1.mp4'; // Set the correct video file path
+    video.load();
 
     // Play the video
     videoElement.play()
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
 
-    // Trigger countdown when the video ends
+    // Trigger countdown when video ends
     videoElement.onended = () => startCountdown(taskIndex);
 }
 

@@ -166,21 +166,6 @@
     document.getElementById('instruction').style.display = 'block'; // Show the instruction page
     console.log('Instruction page displayed.');
 }
-    function startCountdown() {
-      const countdownDisplay = document.getElementById('countdown');
-      countdownDisplay.style.display = 'block';
-      let seconds = 5;
-      countdownDisplay.innerText = seconds;
-      const interval = setInterval(() => {
-        seconds--;
-        countdownDisplay.innerText = seconds;
-        if (seconds <= 0) {
-          clearInterval(interval);
-          countdownDisplay.style.display = 'none';
-          startRecording();
-        }
-      }, 1000);
-    }
 
 function startRecording() {
     showStatusMessage("✅ Recording started. Speak now.");
@@ -474,6 +459,7 @@ function showInstruction() {
 }
 
 function showQuestionVideo(taskIndex, videoSource) {
+    // Hide the instruction page
     const instructionSection = document.getElementById('instruction');
     if (instructionSection) {
         instructionSection.style.display = 'none';
@@ -482,6 +468,7 @@ function showQuestionVideo(taskIndex, videoSource) {
         console.error('Instruction section not found.');
     }
 
+    // Show the DCT 1 section
     const testSection = document.getElementById('test');
     if (testSection) {
         testSection.style.display = 'block';
@@ -490,12 +477,16 @@ function showQuestionVideo(taskIndex, videoSource) {
         console.error('Test section not found.');
     }
 
+    // Dynamically update the video source
     const videoElement = document.getElementById('question-video');
     const sourceElement = document.getElementById('question-source');
-    sourceElement.src = "videos/DCT 1 Q1.mp4";
+    sourceElement.src = videoSource; // Use the parameter dynamically
     videoElement.load();
+
+    // Set the onended event to trigger the countdown
     videoElement.onended = startCountdown;
 
+    // Play the video
     videoElement.play()
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));

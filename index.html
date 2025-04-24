@@ -501,13 +501,6 @@ function showQuestionVideo(taskIndex, videoSource) {
         .catch((error) => console.error('Autoplay failed:', error));
 }
 
-    function loadVideo(index) {
-      const videoElement = document.getElementById('question-video');
-      const videoSource = document.getElementById('video-source');
-      videoSource.src = "videos/DCT 1 Q1.mp4"; // Set the correct video file path
-      video.load();
-    }
-
     function startCountdown() {
     const countdownDisplay = document.getElementById('countdown');
     countdownDisplay.style.display = 'block'; // Show countdown

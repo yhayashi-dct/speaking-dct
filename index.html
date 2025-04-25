@@ -167,79 +167,176 @@
     console.log('Instruction page displayed.');
 }
 
-function startRecording() {
-    showStatusMessage("✅ Recording started. Speak now.");
-    const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // Show microphone and volume gauge
-    startVolumeMeter(); // Start real-time volume monitoring
-    startTimer(); // Begin recording timer
+function showQuestionVideo(taskIndex, videoSource) {
+    const instructionSection = document.getElementById('instruction');
+    const testSection = document.getElementById('test');
+
+    if (!instructionSection || !testSection) {
+        console.error('Instruction or Test section not found.');
+        return;
+    }
+
+    // Show the DCT 1 section
+    const testSection = document.getElementById('test');
+    if (testSection) {
+        testSection.style.display = 'block';
+        console.log('Test section displayed.');
+    } else {
+        console.error('Test section not found.');
+    }
+
+    // Dynamically update the video source
+    const videoElement = document.getElementById('question-video');
+    const sourceElement = document.getElementById('question-source');
+    sourceElement.src = videoSource; // Use the parameter dynamically
+    videoElement.load();
+
+    // ✅ RE-ADD the onended event to trigger the countdown when the video finishes
+    videoElement.onended = startCountdown;
+
+    // Play the video
+    videoElement.play()
+        .then(() => console.log(`Playing video for Task ${taskIndex}.`))
+        .catch((error) => console.error('Autoplay failed:', error));
 }
 
-    function startTimer() {
-      timeLeft = 30;
-      document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
-        if (timeLeft <= 0) {
-          clearInterval(countdownInterval);
-          showStatusMessage("✅ Time is up. Submitting your answer...");
-          stopVolumeMeter();
-          submitAnswer();
+    function startCountdown() {
+    const countdownDisplay = document.getElementById('countdown');
+    countdownDisplay.style.display = 'block'; // Show countdown
+    let seconds = 5;
+    countdownDisplay.innerText = seconds;
+
+    const interval = setInterval(() => {
+        seconds--;
+        countdownDisplay.innerText = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(interval);
+            countdownDisplay.style.display = 'none'; // Hide countdown
+            startRecording(); // Begin the recording process
         }
-      }, 1000);
-    }
-
-    function submitAnswer() {
-      clearInterval(countdownInterval);
-      showStatusMessage("✅ Answer submitted.");
-      document.getElementById('mic-container').style.display = 'none';
-      document.getElementById('next-button').style.display = 'block';
-    }
-     function showMicAndGauge() {
-      const micContainer = document.getElementById('mic-container');
-      micContainer.style.display = 'block'; // Make the microphone and gauge visible
-      console.log('Microphone and gauge bar are now visible.');
-    }
-     function goToNextTask() {
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('next-button').style.display = 'none';
-      document.getElementById('dct2').style.display = 'block';
-      showStatusMessage('✅ Now starting DCT 2');
-      startCountdown();
-    }
-
+    }, 1000);
+}
     function startVolumeMeter() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         micStream = stream;
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(stream);
         analyser = audioContext.createAnalyser();
         source.connect(analyser);
+
         analyser.fftSize = 256;
         const bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
 
         function updateVolume() {
-          analyser.getByteFrequencyData(dataArray);
-          let sum = dataArray.reduce((a, b) => a + b, 0);
-          let average = sum / dataArray.length;
-          let percent = Math.min(100, Math.max(0, average / 2));
-          document.getElementById('volume-level').style.width = percent + '%';
-          requestAnimationFrame(updateVolume);
+            analyser.getByteFrequencyData(dataArray);
+            const sum = dataArray.reduce((a, b) => a + b, 0);
+            const average = sum / dataArray.length;
+            const percent = Math.min(100, Math.max(0, average / 2)); // Normalize volume
+
+            const volumeLevel = document.getElementById('volume-level');
+            volumeLevel.style.width = percent + '%'; // Adjust the width of the gauge
+            requestAnimationFrame(updateVolume);
         }
 
         updateVolume();
-      });
+    });
+}
+
+  function startRecording() {
+    showStatusMessage("✅ Recording started. Speak now.");
+    const micContainer = document.getElementById('mic-container');
+    micContainer.style.display = 'block'; // Show microphone and volume gauge
+    startVolumeMeter(); // Start monitoring the microphone input
+    startTimer(); // Start the 30-second recording timer
+}
+  
+ function startTimer() {
+    let timeLeft = 30;
+    const timerDisplay = document.getElementById('timer');
+    timerDisplay.innerText = `Time remaining: ${timeLeft} seconds`;
+
+    const interval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = `Time remaining: ${timeLeft} seconds`;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            stopRecording(); // Stop recording after time is up
+        }
+    }, 1000);
+}
+
+    function resetTimer() {
+      clearInterval(countdownInterval);
+      document.getElementById("timer").innerText = "Time remaining: 30 seconds";
     }
 
-    function stopVolumeMeter() {
-      if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
+    function submitAnswer() {
+      clearInterval(countdownInterval);
+      alert("Answer submitted.");
+      answers.push("Sample answer " + (videoIndex + 1));
+      if (isFollowup) {
+        document.getElementById('followup').style.display = 'none';
+        isFollowup = false;
+        videoIndex++;
+      } else {
+        videoIndex++;
       }
-      if (audioContext) {
-        audioContext.close();
+
+      if (videoIndex === 3) {
+        showInstruction(1);
+      } else if (videoIndex === 5) {
+        showInstruction(2);
+      } else if (videoIndex >= videos.length) {
+        showProgress();
+      } else {
+        loadVideo(videoIndex);
       }
+    }
+
+    function checkForOptions() {
+      const currentVideo = videos[videoIndex];
+      if (currentVideo.includes("DCT_split questions_Q1")) {
+        document.getElementById('option-buttons').style.display = 'block';
+      }
+    }
+
+    function handleOption(option) {
+      alert("You selected: " + option);
+      document.getElementById('option-buttons').style.display = 'none';
+      isFollowup = true;
+      document.getElementById('test').style.display = 'none';
+      document.getElementById('followup').style.display = 'block';
+      const followupVideo = document.getElementById('followup-video');
+      const followupSource = document.getElementById('followup-source');
+      followupSource.src = followupVideos[option];
+      followupVideo.load();
+      followupVideo.play();
+      resetTimer();
+    }
+
+ function showProgress() {
+    document.getElementById('followup').style.display = 'none'; // Hide follow-up section
+    document.getElementById('progress').style.display = 'block'; // Show progress page
+}
+
+    function downloadProgress() {
+      let progressData = "Your Speaking Test Progress:\n\n";
+      answers.forEach((answer, index) => {
+        let taskName = index < 3 ? taskTitles[0] : index < 5 ? taskTitles[1] : taskTitles[2];
+        progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
+      });
+
+      const blob = new Blob([progressData], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'progress_report.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
   </script>
 </head>
@@ -458,177 +555,6 @@ function showInstruction() {
     video.onended = showNextButton;
 }
 
-function showQuestionVideo(taskIndex, videoSource) {
-    const instructionSection = document.getElementById('instruction');
-    const testSection = document.getElementById('test');
-
-    if (!instructionSection || !testSection) {
-        console.error('Instruction or Test section not found.');
-        return;
-    }
-
-    // Show the DCT 1 section
-    const testSection = document.getElementById('test');
-    if (testSection) {
-        testSection.style.display = 'block';
-        console.log('Test section displayed.');
-    } else {
-        console.error('Test section not found.');
-    }
-
-    // Dynamically update the video source
-    const videoElement = document.getElementById('question-video');
-    const sourceElement = document.getElementById('question-source');
-    sourceElement.src = videoSource; // Use the parameter dynamically
-    videoElement.load();
-
-    // ✅ RE-ADD the onended event to trigger the countdown when the video finishes
-    videoElement.onended = startCountdown;
-
-    // Play the video
-    videoElement.play()
-        .then(() => console.log(`Playing video for Task ${taskIndex}.`))
-        .catch((error) => console.error('Autoplay failed:', error));
-}
-
-    function startCountdown() {
-    const countdownDisplay = document.getElementById('countdown');
-    countdownDisplay.style.display = 'block'; // Show countdown
-    let seconds = 5;
-    countdownDisplay.innerText = seconds;
-
-    const interval = setInterval(() => {
-        seconds--;
-        countdownDisplay.innerText = seconds;
-
-        if (seconds <= 0) {
-            clearInterval(interval);
-            countdownDisplay.style.display = 'none'; // Hide countdown
-            startRecording(); // Begin the recording process
-        }
-    }, 1000);
-}
-    function startVolumeMeter() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaStreamSource(stream);
-        analyser = audioContext.createAnalyser();
-        source.connect(analyser);
-
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-
-        function updateVolume() {
-            analyser.getByteFrequencyData(dataArray);
-            const sum = dataArray.reduce((a, b) => a + b, 0);
-            const average = sum / dataArray.length;
-            const percent = Math.min(100, Math.max(0, average / 2)); // Normalize volume
-
-            const volumeLevel = document.getElementById('volume-level');
-            volumeLevel.style.width = percent + '%'; // Adjust the width of the gauge
-            requestAnimationFrame(updateVolume);
-        }
-
-        updateVolume();
-    });
-}
-
-  function startRecording() {
-    showStatusMessage("✅ Recording started. Speak now.");
-    const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // Show microphone and volume gauge
-    startVolumeMeter(); // Start monitoring the microphone input
-    startTimer(); // Start the 30-second recording timer
-}
-  
- function startTimer() {
-    let timeLeft = 30;
-    const timerDisplay = document.getElementById('timer');
-    timerDisplay.innerText = `Time remaining: ${timeLeft} seconds`;
-
-    const interval = setInterval(() => {
-        timeLeft--;
-        timerDisplay.innerText = `Time remaining: ${timeLeft} seconds`;
-
-        if (timeLeft <= 0) {
-            clearInterval(interval);
-            stopRecording(); // Stop recording after time is up
-        }
-    }, 1000);
-}
-
-    function resetTimer() {
-      clearInterval(countdownInterval);
-      document.getElementById("timer").innerText = "Time remaining: 30 seconds";
-    }
-
-    function submitAnswer() {
-      clearInterval(countdownInterval);
-      alert("Answer submitted.");
-      answers.push("Sample answer " + (videoIndex + 1));
-      if (isFollowup) {
-        document.getElementById('followup').style.display = 'none';
-        isFollowup = false;
-        videoIndex++;
-      } else {
-        videoIndex++;
-      }
-
-      if (videoIndex === 3) {
-        showInstruction(1);
-      } else if (videoIndex === 5) {
-        showInstruction(2);
-      } else if (videoIndex >= videos.length) {
-        showProgress();
-      } else {
-        loadVideo(videoIndex);
-      }
-    }
-
-    function checkForOptions() {
-      const currentVideo = videos[videoIndex];
-      if (currentVideo.includes("DCT_split questions_Q1")) {
-        document.getElementById('option-buttons').style.display = 'block';
-      }
-    }
-
-    function handleOption(option) {
-      alert("You selected: " + option);
-      document.getElementById('option-buttons').style.display = 'none';
-      isFollowup = true;
-      document.getElementById('test').style.display = 'none';
-      document.getElementById('followup').style.display = 'block';
-      const followupVideo = document.getElementById('followup-video');
-      const followupSource = document.getElementById('followup-source');
-      followupSource.src = followupVideos[option];
-      followupVideo.load();
-      followupVideo.play();
-      resetTimer();
-    }
-
- function showProgress() {
-    document.getElementById('followup').style.display = 'none'; // Hide follow-up section
-    document.getElementById('progress').style.display = 'block'; // Show progress page
-}
-
-    function downloadProgress() {
-      let progressData = "Your Speaking Test Progress:\n\n";
-      answers.forEach((answer, index) => {
-        let taskName = index < 3 ? taskTitles[0] : index < 5 ? taskTitles[1] : taskTitles[2];
-        progressData += `${taskName}\nVideo ${index + 1}: Response\nAnswer: ${answer}\n\n`;
-      });
-
-      const blob = new Blob([progressData], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'progress_report.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
   </script>
 </body>
 </html>

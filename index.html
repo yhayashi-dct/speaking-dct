@@ -352,8 +352,9 @@
     <video id="question-video" controls autoplay>
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
     </video>
-    <p>Prepare to answer the question...</p>
-  
+    <p>Play the video and prepare to answer the question...</p>
+   <button onclick="startCountdown()">Record Answer</button>
+   <button onclick="submitAnswer()">Submit</button>
     <!-- Countdown Timer -->
     <div id="countdown" style="text-align: center; font-size: 24px; color: #333;">5</div>
 
@@ -364,8 +365,6 @@
             <div id="volume-level"></div>
         </div>
         <p id="timer">Time remaining: 30 seconds</p>
-   <button onclick="startCountdown()">Record Answer</button>
-   <button onclick="submitAnswer()">Submit</button>
     </div>
 </div>
 
@@ -498,7 +497,7 @@ function showInstruction() {
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
 }
-    function startCountdown() {
+   function startCountdown() {
     const countdownDisplay = document.getElementById('countdown');
     countdownDisplay.style.display = 'block'; // Show countdown
     let seconds = 5;
@@ -507,11 +506,15 @@ function showInstruction() {
     const interval = setInterval(() => {
         seconds--;
         countdownDisplay.innerText = seconds;
-
         if (seconds <= 0) {
             clearInterval(interval);
             countdownDisplay.style.display = 'none'; // Hide countdown
-            startRecording(); // Begin the recording process
+            startRecording(); // Begin recording
+
+            // ✅ Show buttons when countdown ends
+            document.getElementById("mic-container").style.display = "block"; // Show mic section
+            document.getElementById("record-button").style.display = "block"; // Show Record Answer button
+            document.getElementById("submit-button").style.display = "block"; // Show Submit button
         }
     }, 1000);
 }

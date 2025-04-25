@@ -172,8 +172,13 @@
     document.getElementById('test').style.display = 'block'; // Show the DCT1 Q1 page
     console.log('DCT 1 Q1 page displayed.');
         }
-
+    function startCountdown() {
+    document.getElementById('countdown').style.display = 'block'; // countdown
+    console.log('Countdown displayed.');
+        }
+      }
     function startRecording() {
+    document.getElementById('record-button').style.display = 'block';
     showStatusMessage("✅ Recording started. Speak now.");
     const micContainer = document.getElementById('mic-container');
     micContainer.style.display = 'block'; // Show microphone and volume gauge
@@ -201,6 +206,7 @@
       console.log('Microphone and gauge bar are now visible.');
     }
     function submitAnswer() {
+      document.getElementById('submit-button').style.display = 'block';
       clearInterval(countdownInterval);
       showStatusMessage("✅ Answer submitted.");
       document.getElementById('mic-container').style.display = 'none';
@@ -364,7 +370,7 @@
             <div id="volume-level"></div>
         </div>
         <p id="timer">Time remaining: 30 seconds</p>
-   <button onclick="startCountdow()">Record Answer</button>
+   <button onclick="startCountdown()">Record Answer</button>
    <button onclick="submitAnswer()">Submit</button>
     </div>
 </div>

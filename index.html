@@ -195,18 +195,18 @@
         }
       }, 1000);
     }
-
+     function showMicAndGauge() {
+      const micContainer = document.getElementById('mic-container');
+      micContainer.style.display = 'block'; // Make the microphone and gauge visible
+      console.log('Microphone and gauge bar are now visible.');
+    }
     function submitAnswer() {
       clearInterval(countdownInterval);
       showStatusMessage("✅ Answer submitted.");
       document.getElementById('mic-container').style.display = 'none';
       document.getElementById('next-button').style.display = 'block';
     }
-     function showMicAndGauge() {
-      const micContainer = document.getElementById('mic-container');
-      micContainer.style.display = 'block'; // Make the microphone and gauge visible
-      console.log('Microphone and gauge bar are now visible.');
-    }
+
      function goToNextTask() {
       document.getElementById('test').style.display = 'none';
       document.getElementById('next-button').style.display = 'none';
@@ -353,7 +353,7 @@
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
     </video>
     <p>Prepare to answer the question...</p>
-
+  
     <!-- Countdown Timer -->
     <div id="countdown" style="text-align: center; font-size: 24px; color: #333;">5</div>
 
@@ -364,6 +364,8 @@
             <div id="volume-level"></div>
         </div>
         <p id="timer">Time remaining: 30 seconds</p>
+   <button onclick="startCountdow()">Record Answer</button>
+   <button onclick="submitAnswer()">Submit</button>
     </div>
 </div>
 

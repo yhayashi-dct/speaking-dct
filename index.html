@@ -337,7 +337,7 @@ function startRecording() {
     <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
   </video>
   <p>Watch the instructions carefully before proceeding.</p>
-  <button id="next-button" onclick="showQuestionVideo(1, 'videos/DCT 1 Q1.mp4');">Next</button>
+  <button onclick="showQuestionVideo(1, 'videos/DCT 1 Q1.mp4');">Next</button>
 </div>
 
       <!-- DCT 1 Section -->
@@ -459,13 +459,12 @@ function showInstruction() {
 }
 
 function showQuestionVideo(taskIndex, videoSource) {
-    // Hide the instruction page
     const instructionSection = document.getElementById('instruction');
-    if (instructionSection) {
-        instructionSection.style.display = 'none';
-        console.log('Instruction section hidden.');
-    } else {
-        console.error('Instruction section not found.');
+    const testSection = document.getElementById('test');
+
+    if (!instructionSection || !testSection) {
+        console.error('Instruction or Test section not found.');
+        return;
     }
 
     // Show the DCT 1 section

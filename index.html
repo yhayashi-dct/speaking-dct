@@ -166,39 +166,14 @@
     document.getElementById('instruction').style.display = 'block'; // Show the instruction page
     console.log('Instruction page displayed.');
 }
-function showQuestionVideo(taskIndex, videoSource) {
-    const instructionSection = document.getElementById('instruction');
-    const testSection = document.getElementById('test');
 
-    if (!instructionSection || !testSection) {
-        console.error('Instruction or Test section not found.');
-        return;
-    }
+  function showQuestionVideo() {
+    document.getElementById('instruction').style.display = 'none'; // Hide the consent form
+    document.getElementById('test').style.display = 'block'; // Show the DCT1 Q1 page
+    console.log('DCT 1 Q1 page displayed.');
+        }
 
-    // Show the DCT 1 section
-    const testSection = document.getElementById('test');
-    if (testSection) {
-        testSection.style.display = 'block';
-        console.log('Test section displayed.');
-    } else {
-        console.error('Test section not found.');
-    }
-
-    // Dynamically update the video source
-    const videoElement = document.getElementById('question-video');
-    const sourceElement = document.getElementById('question-source');
-    sourceElement.src = videoSource; // Use the parameter dynamically
-    videoElement.load();
-
-    // ✅ RE-ADD the onended event to trigger the countdown when the video finishes
-    videoElement.onended = startCountdown;
-
-    // Play the video
-    videoElement.play()
-        .then(() => console.log(`Playing video for Task ${taskIndex}.`))
-        .catch((error) => console.error('Autoplay failed:', error));
-}
-function startRecording() {
+    function startRecording() {
     showStatusMessage("✅ Recording started. Speak now.");
     const micContainer = document.getElementById('mic-container');
     micContainer.style.display = 'block'; // Show microphone and volume gauge
@@ -489,6 +464,38 @@ function showInstruction() {
     video.onended = showNextButton;
 }
 
+    function showQuestionVideo(taskIndex, videoSource) {
+    const instructionSection = document.getElementById('instruction');
+    const testSection = document.getElementById('test');
+
+    if (!instructionSection || !testSection) {
+        console.error('Instruction or Test section not found.');
+        return;
+    }
+
+    // Show the DCT 1 section
+    const testSection = document.getElementById('test');
+    if (testSection) {
+        testSection.style.display = 'block';
+        console.log('Test section displayed.');
+    } else {
+        console.error('Test section not found.');
+    }
+
+    // Dynamically update the video source
+    const videoElement = document.getElementById('question-video');
+    const sourceElement = document.getElementById('question-source');
+    sourceElement.src = videoSource; // Use the parameter dynamically
+    videoElement.load();
+
+    // ✅ RE-ADD the onended event to trigger the countdown when the video finishes
+    videoElement.onended = startCountdown;
+
+    // Play the video
+    videoElement.play()
+        .then(() => console.log(`Playing video for Task ${taskIndex}.`))
+        .catch((error) => console.error('Autoplay failed:', error));
+}
     function startCountdown() {
     const countdownDisplay = document.getElementById('countdown');
     countdownDisplay.style.display = 'block'; // Show countdown

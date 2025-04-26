@@ -495,22 +495,18 @@ function showInstruction() {
         .catch((error) => console.error('Autoplay failed:', error));
 }
 
-function startRecording() {
+   function startRecording() {
     console.log("Recording started!");
 
-    const micContainer = document.getElementById('mic-container');
-    const micIcon = document.getElementById('mic-icon');
-    const volumeBar = document.getElementById('volume-bar');
-    const timer = document.getElementById('timer');
+    // ✅ Ensure microphone & volume gauge appear
+    document.getElementById('mic-container').style.display = 'block';
+    document.getElementById('mic-icon').style.display = 'block';
+    document.getElementById('volume-bar').style.display = 'block';
+    document.getElementById('timer').style.display = 'block';
 
-    if (micContainer && micIcon && volumeBar && timer) {
-        micContainer.style.display = 'block';
-        micIcon.style.display = 'block';
-        volumeBar.style.display = 'block';
-        timer.style.display = 'block';
-    } else {
-        console.error("One or more microphone elements not found in HTML.");
-    }
+    startVolumeMeter(); // ✅ Activate real-time volume gauge
+    startTimer(); // ✅ Start 30-second recording timer
+}
 
     function startVolumeMeter() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {

@@ -496,28 +496,42 @@ function showInstruction() {
 }
 
    function startRecording() {
-    console.log("Recording started!"); // ✅ Debugging log
+    console.log("Recording started!");
 
-    document.getElementById('mic-container').style.display = 'block'; 
+    // ✅ Ensure microphone & volume gauge appear
+    document.getElementById('mic-container').style.display = 'block';
     document.getElementById('mic-icon').style.display = 'block';
     document.getElementById('volume-bar').style.display = 'block';
     document.getElementById('timer').style.display = 'block';
 
-    startVolumeMeter(); // ✅ Activate live volume gauge
+    startVolumeMeter(); // ✅ Activate real-time volume gauge
     startTimer(); // ✅ Start 30-second recording timer
 }
 
     function startVolumeMeter() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(stream);
-        analyser = audioContext.createAnalyser();
+        const analyser = audioContext.createAnalyser();
         source.connect(analyser);
-
         analyser.fftSize = 256;
         const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
+        const dataArray = new Uint8Array(bufferLength);
+
+        function updateVolume() {
+            analyser.getByteFrequencyData(dataArray);
+            const sum = dataArray.reduce((a, b) => a + b, 0);
+            const average = sum / dataArray.length;
+            const percent = Math.min(100, Math.max(0, average / 2));
+
+            document.getElementById('volume-level').style.width = percent + '%';
+
+            requestAnimationFrame(updateVolume);
+        }
+
+        updateVolume();
+    });
+}
 
         function updateVolume() {
             analyser.getByteFrequencyData(dataArray);

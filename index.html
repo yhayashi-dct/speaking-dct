@@ -173,17 +173,15 @@
     console.log('DCT 1 Q1 page displayed.');
         }
 
-    function startRecording() {
-    const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // ✅ Show microphone container
+function startRecording() {
+    // ✅ Show microphone and volume gauge immediately
+    document.getElementById('mic-container').style.display = 'block'; 
+    document.getElementById('mic-icon').style.display = 'block';
+    document.getElementById('volume-bar').style.display = 'block';
+    document.getElementById('timer').style.display = 'block';
 
-    document.getElementById('mic-icon').style.display = 'block'; // ✅ Show microphone icon
-    document.getElementById('volume-bar').style.display = 'block'; // ✅ Show volume bar
-    document.getElementById('timer').style.display = 'block'; // ✅ Show countdown timer
-
-    showStatusMessage('✅ Recording started. Speak now.');
-    startVolumeMeter(); // ✅ Start live volume gauge
-    startTimer(); // ✅ Start the 30-second recording timer
+    startVolumeMeter(); // ✅ Activate live volume gauge
+    startTimer(); // ✅ Start 30-second recording timer
 }
 
     function startTimer() {
@@ -360,18 +358,15 @@
     <p>Play the video and prepare to answer the question...</p>
    <button onclick="startRecording()">Record Answer</button>
    <button onclick="submitAnswer()">Submit</button>
-    <!-- Countdown Timer -->
-    <div id="countdown" style="text-align: center; font-size: 24px; color: #333;">5</div>
 
- <!-- Microphone Icon and Volume Gauge -->
-    <div id="mic-container" style="display: none;">
+<!-- Microphone Icon & Volume Gauge -->
+<div id="mic-container" style="display: none;">
     <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
     <div id="volume-bar">
         <div id="volume-level"></div>
     </div>
-    <p id="timer">Time remaining: 30 seconds</p>
+    <p id="timer" style="display: none;">Time remaining: 30 seconds</p>
 </div>
-
 
    <!-- DCT 2 Section -->
 <div id="dct2">
@@ -501,7 +496,18 @@ function showInstruction() {
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
 }
-  
+
+    function startRecording() {
+    // ✅ Show microphone and volume gauge immediately
+    document.getElementById('mic-container').style.display = 'block'; 
+    document.getElementById('mic-icon').style.display = 'block';
+    document.getElementById('volume-bar').style.display = 'block';
+    document.getElementById('timer').style.display = 'block';
+
+    startVolumeMeter(); // ✅ Activate live volume gauge
+    startTimer(); // ✅ Start 30-second recording timer
+}
+
     function startVolumeMeter() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         micStream = stream;
@@ -528,15 +534,7 @@ function showInstruction() {
         updateVolume();
     });
 }
-
-  function startRecording() {
-    showStatusMessage("✅ Recording started. Speak now.");
-    const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // Show microphone and volume gauge
-    startVolumeMeter(); // Start monitoring the microphone input
-    startTimer(); // Start the 30-second recording timer
-}
-  
+ 
  function startTimer() {
     let timeLeft = 30;
     const timerDisplay = document.getElementById('timer');

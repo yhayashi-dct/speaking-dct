@@ -168,17 +168,22 @@
 }
 
   function showQuestionVideo() {
-    document.getElementById('instruction').style.display = 'none'; // Hide the consent form
+    document.getElementById('instruction').style.display = 'none'; // Hide the instruction
     document.getElementById('test').style.display = 'block'; // Show the DCT1 Q1 page
     console.log('DCT 1 Q1 page displayed.');
         }
 
     function startRecording() {
-    showStatusMessage("✅ Recording started. Speak now.");
     const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // Show microphone and volume gauge
-    startVolumeMeter(); // Start real-time volume monitoring
-    startTimer(); // Begin recording timer
+    micContainer.style.display = 'block'; // ✅ Show microphone container
+
+    document.getElementById('mic-icon').style.display = 'block'; // ✅ Show microphone icon
+    document.getElementById('volume-bar').style.display = 'block'; // ✅ Show volume bar
+    document.getElementById('timer').style.display = 'block'; // ✅ Show countdown timer
+
+    showStatusMessage('✅ Recording started. Speak now.');
+    startVolumeMeter(); // ✅ Start live volume gauge
+    startTimer(); // ✅ Start the 30-second recording timer
 }
 
     function startTimer() {
@@ -353,19 +358,18 @@
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
     </video>
     <p>Play the video and prepare to answer the question...</p>
-   <button onclick="startCountdown()">Record Answer</button>
+   <button onclick="startRecording()">Record Answer</button>
    <button onclick="submitAnswer()">Submit</button>
     <!-- Countdown Timer -->
     <div id="countdown" style="text-align: center; font-size: 24px; color: #333;">5</div>
 
-    <!-- Microphone Icon and Volume Gauge -->
+ <!-- Microphone Icon and Volume Gauge -->
     <div id="mic-container" style="display: none;">
-        <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
-        <div id="volume-bar">
-            <div id="volume-level"></div>
-        </div>
-        <p id="timer">Time remaining: 30 seconds</p>
+    <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
+    <div id="volume-bar">
+        <div id="volume-level"></div>
     </div>
+    <p id="timer">Time remaining: 30 seconds</p>
 </div>
 
 
@@ -497,27 +501,7 @@ function showInstruction() {
         .then(() => console.log(`Playing video for Task ${taskIndex}.`))
         .catch((error) => console.error('Autoplay failed:', error));
 }
-   function startCountdown() {
-    const countdownDisplay = document.getElementById('countdown');
-    countdownDisplay.style.display = 'block'; // Show countdown
-    let seconds = 5;
-    countdownDisplay.innerText = seconds;
-
-    const interval = setInterval(() => {
-        seconds--;
-        countdownDisplay.innerText = seconds;
-        if (seconds <= 0) {
-            clearInterval(interval);
-            countdownDisplay.style.display = 'none'; // Hide countdown
-            startRecording(); // Begin recording
-
-            // ✅ Show buttons when countdown ends
-            document.getElementById("mic-container").style.display = "block"; // Show mic section
-            document.getElementById("record-button").style.display = "block"; // Show Record Answer button
-            document.getElementById("submit-button").style.display = "block"; // Show Submit button
-        }
-    }, 1000);
-}
+  
     function startVolumeMeter() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         micStream = stream;

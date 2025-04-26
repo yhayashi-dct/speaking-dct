@@ -361,7 +361,7 @@ function startRecording() {
    <button onclick="submitAnswer()">Submit</button>
 
 <!-- Microphone Icon & Volume Gauge -->
-<div id="mic-container" style="display: none;">
+   <div id="mic-container" style="display: none;">
     <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
     <div id="volume-bar">
         <div id="volume-level"></div>
@@ -498,8 +498,9 @@ function showInstruction() {
         .catch((error) => console.error('Autoplay failed:', error));
 }
 
-    function startRecording() {
-    // ✅ Show microphone and volume gauge immediately
+   function startRecording() {
+    console.log("Recording started!"); // ✅ Debugging log
+
     document.getElementById('mic-container').style.display = 'block'; 
     document.getElementById('mic-icon').style.display = 'block';
     document.getElementById('volume-bar').style.display = 'block';

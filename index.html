@@ -156,7 +156,6 @@
         showStatusMessage('✅ You must agree to the informed consent to proceed.');
         return false;
     }
-    showStatusMessage('✅ Thank you for your consent.');
     document.getElementById('consent-form').style.display = 'none';
     showInstruction(0); // Ensure this is the only call after consent
     return true;

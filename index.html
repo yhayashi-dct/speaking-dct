@@ -175,11 +175,14 @@
 
 function startRecording() {
   const micContainer = document.getElementById('mic-container');
-    micContainer.style.display = 'block'; // ✅ Show microphone container
-     document.getElementById('mic-icon').style.display = 'block';
+    document.getElementById('mic-icon').style.display = 'block';
     document.getElementById('volume-bar').style.display = 'block';
     document.getElementById('timer').style.display = 'block';
     console.log("Recording started!");
+  if (micContainer) {
+    micContainer.style.display = 'block'; // ✅ Show microphone container
+} else {
+    console.error("Mic container not found in HTML.");
 }
 
     function startTimer() {
@@ -499,10 +502,17 @@ function showInstruction() {
     console.log("Recording started!");
 
     // ✅ Ensure microphone & volume gauge appear
-    document.getElementById('mic-container').style.display = 'block';
-    document.getElementById('mic-icon').style.display = 'block';
-    document.getElementById('volume-bar').style.display = 'block';
-    document.getElementById('timer').style.display = 'block';
+    let micContainer = document.getElementById('mic-container');
+    let micIcon = document.getElementById('mic-icon');
+    let volumeBar = document.getElementById('volume-bar');
+
+    if (micContainer && micIcon && volumeBar) {
+        micContainer.style.display = 'block';
+        micIcon.style.display = 'block';
+        volumeBar.style.display = 'block';
+    } else {
+        console.error("Mic container or volume bar not found in the HTML.");
+    }
 
     startVolumeMeter(); // ✅ Activate real-time volume gauge
     startTimer(); // ✅ Start 30-second recording timer

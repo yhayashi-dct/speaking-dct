@@ -174,14 +174,15 @@
         }
 
 function startRecording() {
-    // ✅ Show microphone and volume gauge immediately
-    document.getElementById('mic-container').style.display = 'block'; 
-    document.getElementById('mic-icon').style.display = 'block';
+  const micContainer = document.getElementById('mic-container');
+    micContainer.style.display = 'block'; // ✅ Show microphone container
+     document.getElementById('mic-icon').style.display = 'block';
     document.getElementById('volume-bar').style.display = 'block';
     document.getElementById('timer').style.display = 'block';
-
+    showStatusMessage('✅ Recording started. Speak now.');
     startVolumeMeter(); // ✅ Activate live volume gauge
     startTimer(); // ✅ Start 30-second recording timer
+    console.log("Recording started!");
 }
 
     function startTimer() {

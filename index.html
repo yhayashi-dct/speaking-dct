@@ -90,13 +90,14 @@
     margin-top: 20px;
     display: none; /* Ensure these sections are hidden initially */
    }
-    #video-container {
+   #video-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: auto; /* Video adjusts to its content size */
     margin: 0 auto; /* Center the container itself */
-  }
+    text-align: center; /* Center any text inside */
+}
     video {
       width: 80%;
       height: auto;
@@ -344,7 +345,6 @@ function startTimer() {
       <!-- DCT 1 Section -->
 <div id="test" style="display: none;">
     <h2>DCT 1</h2>
-   <div id="video-container">
     <video id="question-video" controls autoplay>
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
     </video>

@@ -92,10 +92,11 @@
    }
     #video-container {
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    margin: 0 auto; /* Horizontal centering for modern layouts */
-     }
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Video adjusts to its content size */
+    margin: 50px auto; /* Adds spacing above and below */
+}
     video {
       width: 80%;
       height: auto;
@@ -176,13 +177,11 @@
 
 function startRecording() {
     const micContainer = document.getElementById('mic-container');
-    const micIcon = document.getElementById('mic-icon');
-    const volumeBar = document.getElementById('volume-bar');
-    const timer = document.getElementById('timer');
-    console.log("Recording started!");
-}
-
-    function startTimer() {
+     micContainer.style.display = 'block'; // Make the microphone and gauge visible
+     console.log('Microphone and gauge bar are now visible.');
+    }
+   
+function startTimer() {
       timeLeft = 30;
       document.getElementById("timer").innerText = `Time remaining: ${timeLeft} seconds`;
       countdownInterval = setInterval(() => {
@@ -196,12 +195,7 @@ function startRecording() {
         }
       }, 1000);
     }
-     function showMicAndGauge() {
-      const micContainer = document.getElementById('mic-container');
-      micContainer.style.display = 'block'; // Make the microphone and gauge visible
-      console.log('Microphone and gauge bar are now visible.');
-    }
-    function submitAnswer() {
+     function submitAnswer() {
       clearInterval(countdownInterval);
       showStatusMessage("✅ Answer submitted.");
       document.getElementById('mic-container').style.display = 'none';
@@ -498,7 +492,7 @@ function showInstruction() {
         .catch((error) => console.error('Autoplay failed:', error));
 }
 
- function startRecording() {
+function startRecording() {
     console.log("Recording started!");
 
     const micContainer = document.getElementById('mic-container');

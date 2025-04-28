@@ -173,10 +173,10 @@
         }
 
 function startRecording() {
-   document.getElementById('mic-container').style.display = 'block'; // ✅ Show microphone container
-   document.getElementById('mic-icon').style.display = 'block';
-    document.getElementById('volume-bar').style.display = 'block';
-    document.getElementById('timer').style.display = 'block';
+    const micContainer = document.getElementById('mic-container');
+    const micIcon = document.getElementById('mic-icon');
+    const volumeBar = document.getElementById('volume-bar');
+    const timer = document.getElementById('timer');
     console.log("Recording started!");
 }
 
@@ -352,18 +352,17 @@ function startRecording() {
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
     </video>
     <p>Play the video and prepare to answer the question...</p>
-   <button onclick="startRecording()">Record Answer</button>
-   <button onclick="submitAnswer()">Submit</button>
 
-<!-- ✅ Microphone & Volume Gauge Bar (Ensuring Proper Placement) -->
-<div id="mic-container" style="display: none; margin-top: 10px;">
+<!-- Record Answer and Submit Buttons -->
+<button id="record-button" onclick="startRecording()">Record Answer</button>
+<button id="submit-button" onclick="submitAnswer()">Submit</button>
+
+<!-- Microphone Icon and Volume Gauge -->
+    <div id="mic-container" style="display: none; margin-top: 10px;">
     <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
-    
-    <!-- ✅ Volume Gauge Bar -->
     <div id="volume-bar" style="display: none;">
         <div id="volume-level" style="width: 0%; height: 20px; background-color: green;"></div>
     </div>
-    
     <p id="timer" style="display: none;">Time remaining: 30 seconds</p>
 </div>
 
@@ -497,7 +496,7 @@ function showInstruction() {
         .catch((error) => console.error('Autoplay failed:', error));
 }
 
-  function startRecording() {
+ function startRecording() {
     console.log("Recording started!");
 
     const micContainer = document.getElementById('mic-container');
@@ -506,37 +505,36 @@ function showInstruction() {
     const timer = document.getElementById('timer');
 
     if (micContainer && micIcon && volumeBar && timer) {
-        micContainer.style.display = 'block'; // ✅ Ensure the whole container is shown
-        micIcon.style.display = 'block'; // ✅ Show microphone icon
-        volumeBar.style.display = 'block'; // ✅ Show volume gauge
-        timer.style.display = 'block'; // ✅ Show countdown timer
+        micContainer.style.display = 'block'; // Show microphone container
+        micIcon.style.display = 'block'; // Show microphone icon
+        volumeBar.style.display = 'block'; // Show volume gauge
+        timer.style.display = 'block'; // Show timer
     } else {
         console.error("One or more microphone elements not found in HTML.");
     }
 
-    startVolumeMeter(); // ✅ Activate real-time volume gauge
+    startVolumeMeter(); // Activate real-time volume gauge
+    startTimer(); // Start 30-second recording timer
 }
 
     function startVolumeMeter() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(stream);
-        analyser = audioContext.createAnalyser();
+        const analyser = audioContext.createAnalyser();
         source.connect(analyser);
-
         analyser.fftSize = 256;
         const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
+        const dataArray = new Uint8Array(bufferLength);
 
         function updateVolume() {
             analyser.getByteFrequencyData(dataArray);
             const sum = dataArray.reduce((a, b) => a + b, 0);
             const average = sum / dataArray.length;
-            const percent = Math.min(100, Math.max(0, average / 2)); // Normalize volume
+            const percent = Math.min(100, Math.max(0, average / 2));
 
-            const volumeLevel = document.getElementById('volume-level');
-            volumeLevel.style.width = percent + '%'; // Adjust the width of the gauge
+            document.getElementById('volume-level').style.width = percent + '%';
+
             requestAnimationFrame(updateVolume);
         }
 
@@ -544,7 +542,7 @@ function showInstruction() {
     });
 }
  
- function startTimer() {
+function startTimer() {
     let timeLeft = 30;
     const timerDisplay = document.getElementById('timer');
     timerDisplay.innerText = `Time remaining: ${timeLeft} seconds`;
@@ -555,7 +553,7 @@ function showInstruction() {
 
         if (timeLeft <= 0) {
             clearInterval(interval);
-            stopRecording(); // Stop recording after time is up
+            console.log("Recording ended.");
         }
     }, 1000);
 }

@@ -95,7 +95,8 @@
     justify-content: center;
     align-items: center;
     height: auto; /* Video adjusts to its content size */
-    margin: 50px auto; /* Adds spacing above and below */
+    margin: 0 auto; /* Center the container itself */
+    text-align: center; /* Center any text inside */
 }
     video {
       width: 80%;
@@ -347,9 +348,9 @@ function startTimer() {
     <video id="question-video" controls autoplay>
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
     </video>
-    <p>Play the video and prepare to answer the question...</p>
+    <p>Play the video and prepare to answer the question.</p>
 
-<!-- Record Answer and Submit Buttons -->
+  <!-- Record Answer and Submit Buttons -->
 <button id="record-button" onclick="startRecording()">Record Answer</button>
 <button id="submit-button" onclick="submitAnswer()">Submit</button>
 

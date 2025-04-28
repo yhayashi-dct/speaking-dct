@@ -176,7 +176,12 @@
     console.log('DCT 1 Q1 page displayed.');
         }
 
-function startRecording() {
+function testsection() {
+    document.getElementById('test').style.display = 'none'; // Hide DCT 1 Q1section
+    document.getElementById('dct1Q2').style.display = 'block'; // ✅ Show DCT1 Q2 section
+    console.log("✅ Now starting DCT1 Q2 .");
+}
+    function startRecording() {
     const micContainer = document.getElementById('mic-container');
      micContainer.style.display = 'block'; // Make the microphone and gauge visible
      console.log('Microphone and gauge bar are now visible.');
@@ -332,7 +337,7 @@ function startTimer() {
       <button onclick="validateConsent()">Next</button>
     </div>
 
-<!-- Instruction Section -->
+<!-- Instruction Section (DCT 1)-->
 <div id="instruction" style="display: none;">
   <h2>Instructions</h2>
   <video id="instruction-video" controls autoplay>
@@ -342,7 +347,7 @@ function startTimer() {
   <button onclick="showQuestionVideo(1, 'videos/DCT 1 Q1.mp4');">Next</button>
 </div>
 
-      <!-- DCT 1 Section -->
+      <!-- DCT 1 Q1 Section -->
 <div id="test" style="display: none;">
     <h2>DCT 1</h2>
     <video id="question-video" controls autoplay>
@@ -367,24 +372,45 @@ function startTimer() {
     <p id="timer" style="display: none;">Time remaining: 30 seconds</p>
 </div>
 
-   <!-- DCT 2 Section -->
-<div id="dct2">
-  <h3 id="task-title">DCT 2</h3>
-  <div id="video-container">
-    <video id="dct2-video" controls autoplay onended="checkForOptionsDCT2()">
-      <source id="dct2-source" src="" type="video/mp4" />
+   <!-- DCT 1 Q2 Section -->
+    <div id="dct1Q2" style="display: none;">
+    <h2>DCT 2</h2>
+    <video id="question-video-q2" controls autoplay>
+        <source id="question-source-q2" src="videos/DCT 1 Q2.mp4" type="video/mp4" />
     </video>
-  </div>
-  <div id="timer">Time remaining: 30 seconds</div>
-  <button onclick="startCountdownDCT2()">Record Answer</button>
-  <button onclick="submitAnswerDCT2()">Submit</button>
+    <p>Play the video and prepare to answer the question.</p>
+    
+    <!-- Next (Q3) Button -->
+     <button onclick="showQuestionVideo(1, 'videos/DCT 1 Q2.mp4');">Next (Q3)</button>
 </div>
 
-<!-- DCT 3 Section -->
-<div id="dct3">
-  <h3 id="task-title">DCT 3</h3>
+ <!-- DCT 1 Q3 Section -->
+    <div id="dct1Q3" style="display: none;">
+    <h2>DCT 2</h2>
+    <video id="question-video-q2" controls autoplay>
+        <source id="question-source-q2" src="videos/DCT 1 Q3.mp4" type="video/mp4" />
+    </video>
+    <p>Play the video and prepare to answer the question.</p>
+    
+    <!-- Next (Q3) Button -->
+    <button id="next-button" onclick="loadNextQuestion(3)">Next (DCT 2)</button>
+      </div>
+    
+    <!-- Instruction Section (DCT 2)-->
+    <div id="instruction" style="display: none;">
+  <h2>Instructions</h2>
+  <video id="instruction-video" controls autoplay>
+    <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
+  </video>
+  <p>Watch the instructions carefully before proceeding.</p>
+  <button onclick="showQuestionVideo(2, 'videos/DCT2 instructions.mp4');">Next</button>
+</div>
+    
+<!-- DCT 2 Section -->
+    <div id="dct2">
+  <h3 id="task-title">DCT 2</h3>
   <div id="video-container">
-    <video id="dct3-video" controls autoplay>
+    <video id="dct2-video" controls autoplay>
       <source id="dct3-source" src="" type="video/mp4" />
     </video>
   </div>

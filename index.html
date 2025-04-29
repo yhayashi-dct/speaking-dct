@@ -176,13 +176,13 @@
     console.log('DCT 1 Q1 page displayed.');
         }
 
-function showDCT1D3() {
+function showDCT1Q2() {
     document.getElementById('test').style.display = 'none'; // ✅ Hide DCT 1 Q1 section
     document.getElementById('dct1Q2').style.display = 'block'; // ✅ Show DCT 1 Q2 section
     console.log("DCT 1 Q2 page displayed.");
 }
     
-function showDCT1D3() {
+function showDCT1Q3() {
     document.getElementById('dctQ2').style.display = 'none'; // ✅ Hide DCT 1 Q2 section
     document.getElementById('dct1Q3').style.display = 'block'; // ✅ Show DCT 1 Q3 section
     console.log("DCT 1 Q3 page displayed.");
@@ -366,7 +366,7 @@ function startTimer() {
 <button id="submit-button-q1" onclick="submitAnswer()">Submit</button>
 
   <!-- ✅ Next Button -->
-   <button id="next-button-q2" onclick="showDCT1Q2()">Next (Q3)</button>
+   <button id="next-button-q2" onclick="showDCT1Q2()">Next (Q2)</button>
 </div>
 
 <!-- Microphone Icon and Volume Gauge -->
@@ -407,7 +407,7 @@ function startTimer() {
 <button id="submit-button" onclick="submitAnswer()">Submit</button>
     
     <!-- Next (Q3) Button -->
-    <button id="next-button-2" onclick="testsection()">Next (DCT2)</button>
+    <button id="next-button-2" onclick="showDCT2instruction()">Next (DCT2)</button>
       </div>
     
     <!-- Instruction Section (DCT 2)-->

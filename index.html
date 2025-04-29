@@ -172,18 +172,18 @@
 
   function showQuestionVideo() {
     document.getElementById('instruction').style.display = 'none'; // Hide the instruction
-    document.getElementById('dct1Q1').style.display = 'block'; // Show the DCT1 Q1 page
+    document.getElementById('test').style.display = 'block'; // Show the DCT1 Q1 page
     console.log('DCT 1 Q1 page displayed.');
         }
 
-function showDCT1Q2() {
-    document.getElementById('dct1Q1').style.display = 'none'; // ✅ Hide DCT 1 Q1 section
+function testsection() {
+    document.getElementById('test').style.display = 'none'; // ✅ Hide DCT 1 Q1 section
     document.getElementById('dct1Q2').style.display = 'block'; // ✅ Show DCT 1 Q2 section
     console.log("DCT 1 Q2 page displayed.");
 }
     
-function showDCT1Q3() {
-    document.getElementById('dctQ2').style.display = 'none'; // ✅ Hide DCT 1 Q2 section
+function testsection() {
+    document.getElementById('test').style.display = 'none'; // ✅ Hide DCT 1 Q2 section
     document.getElementById('dct1Q3').style.display = 'block'; // ✅ Show DCT 1 Q3 section
     console.log("DCT 1 Q3 page displayed.");
 }
@@ -354,7 +354,7 @@ function startTimer() {
 </div>
 
       <!-- DCT 1 Q1 Section -->
-<div id="dct1Q1" style="display: none;">
+<div id="test" style="display: none;">
     <h2>DCT1 Q1</h2>
     <video id="question-video-q1" controls autoplay>
         <source id="question-source" src="videos/DCT 1 Q1.mp4" type="video/mp4" />
@@ -366,7 +366,7 @@ function startTimer() {
 <button id="submit-button-q1" onclick="submitAnswer()">Submit</button>
 
   <!-- ✅ Next Button -->
-   <button id="next-button-q2" onclick="showDCT1Q2()">Next (Q2)</button>
+    <button id="next-button-q2" onclick="testsection()">Next (Q2)</button>
 </div>
 
 <!-- Microphone Icon and Volume Gauge -->
@@ -391,7 +391,7 @@ function startTimer() {
 <button id="submit-button-q2" onclick="submitAnswer()">Submit</button>
     
     <!-- Next (Q3) Button -->
-        <button id="next-button-q3" onclick="showDCT1Q3()">Next (Q3)</button>
+      <button id="next-button-q3" onclick="testsection()">Next (Q3)</button>
 </div>
 
  <!-- DCT 1 Q3 Section -->

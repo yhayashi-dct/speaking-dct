@@ -164,9 +164,9 @@
     showInstruction(0); // Ensure this is the only call after consent
     return true;
 }
-   function showInstruction() {
+   function showDCT1Instruction() {
     document.getElementById('consent-form').style.display = 'none'; // Hide the consent form
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+    document.getElementById('instruction1').style.display = 'block'; // Show the instruction page
     console.log('Instruction page displayed.');
 }
 
@@ -176,8 +176,8 @@
     console.log('DCT 1 Q1 page displayed.');
         }
 
-function testsection() {
-    document.getElementById('test').style.display = 'none'; // ✅ Hide DCT 1 Q1 section
+function testsectionQ2() {
+    document.getElementById('dct1Q1').style.display = 'none'; // ✅ Hide DCT 1 Q1 section
     document.getElementById('dct1Q2').style.display = 'block'; // ✅ Show DCT 1 Q2 section
     console.log("DCT 1 Q2 page displayed.");
 }
@@ -387,6 +387,14 @@ function startTimer() {
     
     <!-- Next (Q3) Button -->
      <button onclick="showQuestionVideo(1, 'videos/DCT 1 Q2.mp4');">Next (Q3)</button>
+      
+      <!-- Microphone Icon and Volume Gauge -->
+    <div id="mic-container" style="display: none; margin-top: 10px;">
+    <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
+    <div id="volume-bar" style="display: none;">
+        <div id="volume-level" style="width: 0%; height: 20px; background-color: green;"></div>
+    </div>
+    <p id="timer" style="display: none;">Time remaining: 30 seconds</p>
 </div>
 
  <!-- DCT 1 Q3 Section -->
@@ -403,13 +411,20 @@ function startTimer() {
     
     <!-- Next (Q3) Button -->
     <button id="next-button-q3" onclick="testsection()">Next (DCT2)</button>
+      <!-- Microphone Icon and Volume Gauge -->
+    <div id="mic-container" style="display: none; margin-top: 10px;">
+    <img id="mic-icon" src="https://img.icons8.com/ios-filled/50/000000/microphone.png" alt="Microphone Icon" />
+    <div id="volume-bar" style="display: none;">
+        <div id="volume-level" style="width: 0%; height: 20px; background-color: green;"></div>
+    </div>
+    <p id="timer" style="display: none;">Time remaining: 30 seconds</p>
       </div>
     
     <!-- Instruction Section (DCT 2)-->
-    <div id="instruction" style="display: none;">
+    <div id="instruction2" style="display: none;">
   <h2>Instructions</h2>
   <video id="instruction-video" controls autoplay>
-    <source id="instruction-source" src="videos/DCT1 instructions.mp4" type="video/mp4" />
+    <source id="instruction-source" src="videos/DCT2 instructions.mp4" type="video/mp4" />
   </video>
   <p>Watch the instructions carefully before proceeding.</p>
   <button onclick="showQuestionVideo(2, 'videos/DCT2 instructions.mp4');">Next</button>
@@ -485,8 +500,8 @@ function validateConsent() {
     return true;
 }
 
-function showInstruction() {
-    document.getElementById('instruction').style.display = 'block'; // Show the instruction page
+function showDCT1Instruction() {
+    document.getElementById('instruction1').style.display = 'block'; // Show the instruction page
     const video = document.getElementById('instruction-video');
     const videoSource = document.getElementById('instruction-source');
     videoSource.src = 'videos/DCT1 instructions.mp4'; // Set the correct video file path

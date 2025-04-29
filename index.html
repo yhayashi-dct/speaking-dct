@@ -181,7 +181,12 @@ function testsection() {
     document.getElementById('dct1Q2').style.display = 'block'; // ✅ Show DCT 1 Q2 section
     console.log("DCT 1 Q2 page displayed.");
 }
-
+    
+function testsection() {
+    document.getElementById('test').style.display = 'none'; // ✅ Hide DCT 1 Q2 section
+    document.getElementById('dct1Q3').style.display = 'block'; // ✅ Show DCT 1 Q3 section
+    console.log("DCT 1 Q3 page displayed.");
+}
     function startRecording() {
     const micContainer = document.getElementById('mic-container');
      micContainer.style.display = 'block'; // Make the microphone and gauge visible
@@ -386,14 +391,14 @@ function startTimer() {
 <button id="submit-button-q2" onclick="submitAnswer()">Submit</button>
     
     <!-- Next (Q3) Button -->
-     <button onclick="showQuestionVideo(1, 'videos/DCT 1 Q2.mp4');">Next (Q3)</button>
+      <button id="next-button-q3" onclick="testsection()">Next (Q3)</button>
 </div>
 
  <!-- DCT 1 Q3 Section -->
     <div id="dct1Q3" style="display: none;">
     <h2>DCT1 Q3</h2>
-    <video id="question-video-q2" controls autoplay>
-        <source id="question-source-q2" src="videos/DCT 1 Q3.mp4" type="video/mp4" />
+    <video id="question-video-q3" controls autoplay>
+        <source id="question-source-q3" src="videos/DCT 1 Q3.mp4" type="video/mp4" />
     </video>
     <p>Play the video and prepare to answer the question.</p>
 
@@ -402,7 +407,7 @@ function startTimer() {
 <button id="submit-button" onclick="submitAnswer()">Submit</button>
     
     <!-- Next (Q3) Button -->
-    <button id="next-button-q3" onclick="testsection()">Next (DCT2)</button>
+    <button id="next-button-2" onclick="testsection()">Next (DCT2)</button>
       </div>
     
     <!-- Instruction Section (DCT 2)-->

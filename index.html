@@ -187,11 +187,12 @@ function testsection() {
     document.getElementById('dct1Q3').style.display = 'block'; // ✅ Show DCT 1 Q3 section
     console.log("DCT 1 Q3 page displayed.");
 }
-  function showDCT2Instruction() {
-    document.getElementById('instruction').style.display = 'none'; // ✅ Hide DCT 1 Instructions
-    document.getElementById('dct2-instruction').style.display = 'block'; // ✅ Show DCT 2 Instructions
-    console.log("✅ Transitioning to DCT 2 instruction page.");
+   function showDCT2Instruction() {
+    document.getElementById('dct1Q3').style.display = 'none'; // ✅ Hide DCT 1 Q3
+    document.getElementById('dct2-instruction').style.display = 'block'; // ✅ Show DCT 2 instruction page
+    console.log("✅ DCT 2 instruction video displayed.");
 }
+
     function startRecording() {
     const micContainer = document.getElementById('mic-container');
      micContainer.style.display = 'block'; // Make the microphone and gauge visible
@@ -411,13 +412,13 @@ function startTimer() {
 <button id="submit-button" onclick="submitAnswer()">Submit</button>
     
     <!-- Next (Q3) Button -->
-  <button id="next-button-dct2" onclick="showDCT2Instruction()">Next (DCT2)</button>
+    <button id="next-button-2" onclick="testsection()">Next (DCT2)</button>
       </div>
     
- <!-- ✅ DCT 2 Instruction Page -->
+   <!-- ✅ DCT 2 Instruction Page -->
 <div id="dct2-instruction" style="display: none;">
     <h2>DCT 2 Instructions</h2>
-    <video id="instruction-video-dct2" controls autoplay>
+    <video id="instruction-video" controls autoplay>
         <source src="videos/DCT2_instructions.mp4" type="video/mp4" />
     </video>
     <p>Watch the instructions carefully before proceeding.</p>
